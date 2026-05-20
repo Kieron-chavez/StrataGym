@@ -1,0 +1,2 @@
+# StrataGym
+monorepo
