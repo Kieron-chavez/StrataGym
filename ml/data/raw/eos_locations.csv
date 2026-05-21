@@ -1,0 +1,45 @@
+gym_id,gym_name,cluster,address,latitude,longitude,rating,review_count,square_footage,tier,monthly_dues_base,amenities,grand_opening_date,status,monthly_checkins,monthly_members
+eos-az-001,EōS Fitness,Avondale,"3005 N Dysart Rd, Avondale, AZ 85392, USA",33.4801112,-112.3390477,4.3,1609,,,,,,open,0,0
+eos-az-002,EōS Fitness,Casa Grande,"1214 E Florence Blvd #1, Casa Grande, AZ 85122, USA",32.8805542,-111.7341884,4.6,162,,,,,,open,0,0
+eos-az-003,EōS Fitness,Chandler,"4949 W Ray Rd, Chandler, AZ 85226, USA",33.3182429,-111.9272518,4.4,1309,,,,,,open,0,0
+eos-az-004,EōS Fitness,Chandler,"1970 E Ray Rd, Chandler, AZ 85225, USA",33.322377,-111.8079515,4.4,1741,,,,,,open,0,0
+eos-az-005,EōS Fitness,Chandler,"4185 S Gilbert Rd, Chandler, AZ 85249, USA",33.2455602,-111.7880343,4.3,1293,,,,,,open,0,0
+eos-az-006,EōS Fitness,Gilbert,"3025 S Val Vista Dr, Gilbert, AZ 85295, USA",33.2970291,-111.7533518,4.7,1623,,,,,,open,0,0
+eos-az-007,EōS Fitness,Gilbert,"3300 S Higley Rd, Gilbert, AZ 85297, USA",33.2909459,-111.7228989,4.4,1815,,,,,,open,0,0
+eos-az-008,EōS Fitness,Gilbert,"7540 S Power Rd, Gilbert, AZ 85297, USA",33.2795753,-111.6876983,4.4,1110,,,,,,open,0,0
+eos-az-009,EōS Fitness,Glendale,"5070 W Olive Ave, Glendale, AZ 85302, USA",33.5686552,-112.1678406,4.3,2275,,,,,,open,0,0
+eos-az-010,EōS Fitness,Glendale,"4355 W Glendale Ave, Glendale, AZ 85301, USA",33.5373189,-112.1532319,4.4,706,,,,,,open,0,0
+eos-az-011,EōS Fitness,Glendale,"5860 W Thunderbird Rd, Glendale, AZ 85306, USA",33.6127316,-112.1842852,4.3,1344,,,,,,open,0,0
+eos-az-012,EōS Fitness,Glendale,"5070 N 83rd Ave, Glendale, AZ 85305, USA",33.510074,-112.2380086,4.3,1619,,,,,,open,0,0
+eos-az-013,EōS Fitness,Glendale,"20255 N 59th Ave, Glendale, AZ 85308, USA",33.6700763,-112.1845646,4.3,1628,,,,,,open,0,0
+eos-az-014,EōS Fitness,Goodyear,"15277 W McDowell Rd, Goodyear, AZ 85395, USA",33.4625049,-112.3875162,4.4,1683,,,,,,open,0,0
+eos-az-015,EōS Fitness,Laveen Village,"5910 W Baseline Rd, Laveen Village, AZ 85339, USA",33.3790385,-112.1880319,4.5,941,,,,,,open,0,0
+eos-az-016,EōS Fitness,Mesa,"2740 E University Dr, Mesa, AZ 85213, USA",33.4241068,-111.7719929,4.5,628,,,,,,open,0,0
+eos-az-017,EōS Fitness,Mesa,"1661 S Alma School Rd, Mesa, AZ 85210, USA",33.3845959,-111.8557407,4.3,2290,,,,,,open,0,0
+eos-az-018,EōS Fitness,Mesa,"9101 E Baseline Rd, Mesa, AZ 85209, USA",33.3770094,-111.6380319,4.4,371,,,,,,open,0,0
+eos-az-019,EōS Fitness,Mesa,"1558 S Signal Butte Rd, Mesa, AZ 85209, USA",33.388061,-111.5996167,4.4,763,,,,,,open,0,0
+eos-az-020,EōS Fitness,Mesa,"2156 E Baseline Rd, Mesa, AZ 85204, USA",33.38039790000001,-111.7855938,4.3,1568,,,,,,open,0,0
+eos-az-021,EōS Fitness,Mesa,"1728 S Greenfield Rd, Mesa, AZ 85206, USA",33.3852159,-111.7424476,4.3,1620,,,,,,open,0,0
+eos-az-022,EōS Fitness,Mesa,"1954 E McKellips Rd, Mesa, AZ 85203, USA",33.4532154,-111.7887612,4.3,1661,,,,,,open,0,0
+eos-az-023,EōS Fitness,Peoria,"8440 W Thunderbird Rd, Peoria, AZ 85381, USA",33.61150920000001,-112.2407923,4.3,1636,,,,,,open,0,0
+eos-az-024,EōS Fitness,Peoria,"10160 W Lake Pleasant Pkwy, Peoria, AZ 85382, USA",33.6787307,-112.2754085,4.6,837,,,,,,open,0,0
+eos-az-025,EōS Fitness,Phoenix,"1515 E Bethany Home Rd, Phoenix, AZ 85014, USA",33.5228048,-112.0488195,4.6,489,,,,,,open,0,0
+eos-az-026,EōS Fitness,Phoenix,"2814 W Bell Rd Ste 1490, Phoenix, AZ 85053, USA",33.6415647,-112.1195696,4.5,728,,,,,,open,0,0
+eos-az-027,EōS Fitness,Phoenix,"12211 N Cave Creek Rd, Phoenix, AZ 85022, USA",33.5978816,-112.0354343,4.3,999,,,,,,open,0,0
+eos-az-028,EōS Fitness,Phoenix,"3110 N Central Ave, Phoenix, AZ 85012, USA",33.4839703,-112.0749532,4.5,1524,,,,,,open,0,0
+eos-az-029,EōS Fitness,Phoenix,"12869 N Tatum Blvd, Phoenix, AZ 85032, USA",33.6039244,-111.9766553,4.4,1237,,,,,,open,0,0
+eos-az-030,EōS Fitness,Phoenix,"7400 W Encanto Blvd, Phoenix, AZ 85035, USA",33.4738021,-112.2183848,4.4,2834,,,,,,open,0,0
+eos-az-031,EōS Fitness,Phoenix,"7000 E Mayo Blvd Bldg 13, Phoenix, AZ 85054, USA",33.6577084,-111.9300138,4.4,1103,,,,,,open,0,0
+eos-az-032,EōS Fitness,Phoenix,"1 E Washington St #250, Phoenix, AZ 85004, USA",33.4479619,-112.0733931,4.3,2191,,,,,,open,0,0
+eos-az-033,EōS Fitness,Phoenix,"1812 W Baseline Rd, Phoenix, AZ 85041, USA",33.3791102,-112.0979771,4.3,1116,,,,,,open,0,0
+eos-az-034,EōS Fitness,Queen Creek,"20610 Signal Butte Rd, Queen Creek, AZ 85142, USA",33.2610734,-111.601701,4.7,676,,,,,,open,0,0
+eos-az-035,EōS Fitness,Queen Creek,"20722 E Riggs Rd, Queen Creek, AZ 85142, USA",33.2213251,-111.6359673,4.3,1579,,,,,,open,0,0
+eos-az-036,EōS Fitness,Scottsdale,"11275 E Vía Linda, Scottsdale, AZ 85259, USA",33.5866826,-111.8375752,4.6,392,,,,,,open,0,0
+eos-az-037,EōS Fitness,Scottsdale,"14843 N Northsight Blvd, Scottsdale, AZ 85260, USA",33.6201988,-111.8961702,4.2,1458,,,,,,open,0,0
+eos-az-038,EōS Fitness,Surprise,"16475 Cactus Rd, Surprise, AZ 85388, USA",33.5933971,-112.4132285,4.1,30,,,,,,open,0,0
+eos-az-039,EōS Fitness,Surprise,"13644 N Litchfield Rd, Surprise, AZ 85379, USA",33.6079004,-112.360248,4.4,1085,,,,,,open,0,0
+eos-az-040,EōS Fitness,Surprise,"16750 W Bell Rd, Surprise, AZ 85374, USA",33.6402303,-112.4197,4.3,1471,,,,,,open,0,0
+eos-az-041,EōS Fitness,Tempe,"917 E Broadway Rd, Tempe, AZ 85282, USA",33.4061499,-111.9252213,4.7,122,,,,,,open,0,0
+eos-az-042,EōS Fitness,Tempe,"750 E Guadalupe Rd, Tempe, AZ 85283, USA",33.3650342,-111.9300785,4.5,937,,,,,,open,0,0
+eos-az-043,EōS Fitness,Tempe,"1840 E Warner Rd STE 111, Tempe, AZ 85284, USA",33.3356239,-111.9095203,4.3,1945,,,,,,open,0,0
+eos-az-044,EōS Fitness,Tempe,"1727 W Ranch Rd, Tempe, AZ 85284, USA",33.3325137,-111.9687798,4.3,1100,,,,,,open,0,0

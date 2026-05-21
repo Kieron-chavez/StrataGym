@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sidebar-width: 220px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #0d1b2a;
+  color: #e2e8f0;
+}
+
+/* Mapbox overrides */
+.mapboxgl-map {
+  font-family: inherit;
+}
+
+.mapboxgl-ctrl-logo {
+  opacity: 0.6;
+}

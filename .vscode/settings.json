@@ -1,0 +1,9 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/ml/.venv/bin/python",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/ml"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  }
+}

@@ -1,6 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+node_modules/
 /node_modules
 /.pnp
 .pnp.js
