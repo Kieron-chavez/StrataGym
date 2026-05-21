@@ -18,8 +18,12 @@ node_modules/
 /coverage
 
 # next.js
-/.next/
+.next/
 /out/
+
+# secrets
+.env
+.env.local
 
 # production
 /build
