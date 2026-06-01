@@ -41,35 +41,20 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
   const censusTractsRef     = useRef<CensusTract[] | null>(null);
   const competitorDataRef   = useRef<Competitor[] | null>(null);
 
-  // ── Eager pre-fetch all layer data once map + gyms are ready ────────────────
+  // ── Eager pre-fetch census + competitor data once map is ready ──────────────
+  // Drive-time isochrones (44 calls) stay lazy — only fetched when that layer is toggled.
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !gyms.length) return;
+    if (!map) return;
+
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
     const prefetch = async () => {
-      const token    = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
-      if (!driveTimeGeojsonRef.current) {
-        const results = await Promise.allSettled(
-          gyms.map((g) =>
-            fetch(`https://api.mapbox.com/isochrone/v1/mapbox/driving/${g.lng},${g.lat}` +
-                  `?contours_minutes=15&polygons=true&access_token=${token}`)
-              .then((r) => r.json())
-          )
-        );
-        const features = results
-          .filter((r): r is PromiseFulfilledResult<{ features?: unknown[] }> => r.status === "fulfilled")
-          .flatMap((r) => (r.value?.features as object[]) ?? []);
-        driveTimeGeojsonRef.current = { type: "FeatureCollection", features };
-      }
-
       if (!censusTractsRef.current) {
         const data = await fetch(`${API_BASE}/api/census-density`)
           .then((r) => r.json()).catch(() => null);
         if (data?.tracts) censusTractsRef.current = data.tracts as CensusTract[];
       }
-
       if (!competitorDataRef.current) {
         const data = await fetch(`${API_BASE}/api/competitors`)
           .then((r) => r.json()).catch(() => null);
@@ -79,7 +64,7 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
 
     map.isStyleLoaded() ? prefetch() : map.once("load", prefetch);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gyms]);
+  }, []);
 
   // ── Init map ────────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -169,6 +154,7 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
+    let cancelled = false;
 
     const active = layers.find((l) => l.id === "drive-time")?.active;
     const token  = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
@@ -188,6 +174,7 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
               .then((r) => r.json())
           )
         );
+        if (cancelled) return;
         const features = results
           .filter((r): r is PromiseFulfilledResult<{ features?: unknown[] }> => r.status === "fulfilled")
           .flatMap((r) => (r.value?.features as object[]) ?? []);
@@ -195,21 +182,25 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
         driveTimeGeojsonRef.current = geojson;
       }
 
+      if (cancelled) return;
       clean();
       const before = beforeSymbol(map);
-      map.addSource(SRC, { type: "geojson", data: geojson as object as GeoJSON.FeatureCollection });
-      map.addLayer({ id: FILL, type: "fill",   source: SRC, paint: { "fill-color": "#06B6D4", "fill-opacity": 0.07 } }, before);
-      map.addLayer({ id: LINE, type: "line",   source: SRC, paint: { "line-color": "#06B6D4", "line-width": 1, "line-opacity": 0.35 } }, before);
+      try {
+        map.addSource(SRC, { type: "geojson", data: geojson as object as GeoJSON.FeatureCollection });
+        map.addLayer({ id: FILL, type: "fill",   source: SRC, paint: { "fill-color": "#06B6D4", "fill-opacity": 0.07 } }, before);
+        map.addLayer({ id: LINE, type: "line",   source: SRC, paint: { "line-color": "#06B6D4", "line-width": 1, "line-opacity": 0.35 } }, before);
+      } catch { /* concurrent run beat us here */ }
     };
 
     map.isStyleLoaded() ? run() : map.once("load", run);
-    return clean;
+    return () => { cancelled = true; clean(); };
   }, [layers, gyms]);
 
   // ── Drive time — candidate pin trade area ───────────────────────────────────
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
+    let cancelled = false;
 
     const active = layers.find((l) => l.id === "drive-time")?.active;
     const token  = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
@@ -223,16 +214,19 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
         `https://api.mapbox.com/isochrone/v1/mapbox/driving/${selectedPin.lng},${selectedPin.lat}` +
         `?contours_minutes=15&polygons=true&access_token=${token}`
       ).then((r) => r.json()).catch(() => null);
-      if (!data || !map.isStyleLoaded()) return;
+      if (cancelled || !data || !map.isStyleLoaded()) return;
 
+      clean(); // guard: remove any source a concurrent run added while we were fetching
       const before = beforeSymbol(map);
-      map.addSource(SRC, { type: "geojson", data });
-      map.addLayer({ id: FILL, type: "fill", source: SRC, paint: { "fill-color": "#F59E0B", "fill-opacity": 0.14 } }, before);
-      map.addLayer({ id: LINE, type: "line", source: SRC, paint: { "line-color": "#F59E0B", "line-width": 1.5, "line-opacity": 0.6 } }, before);
+      try {
+        map.addSource(SRC, { type: "geojson", data });
+        map.addLayer({ id: FILL, type: "fill", source: SRC, paint: { "fill-color": "#F59E0B", "fill-opacity": 0.14 } }, before);
+        map.addLayer({ id: LINE, type: "line", source: SRC, paint: { "line-color": "#F59E0B", "line-width": 1.5, "line-opacity": 0.6 } }, before);
+      } catch { /* concurrent run beat us here */ }
     };
 
     map.isStyleLoaded() ? run() : map.once("load", run);
-    return clean;
+    return () => { cancelled = true; clean(); };
   }, [layers, selectedPin]);
 
   // ── Competitors layer ───────────────────────────────────────────────────────
