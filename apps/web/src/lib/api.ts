@@ -3,11 +3,14 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 export interface Gym {
   gym_id: string;
   name: string;
+  address: string;
   lat: number;
   lng: number;
   status: string;
   monthly_members: number;
   monthly_checkins: number;
+  rating?: number;
+  review_count?: number;
 }
 
 export interface NearbyGym {
@@ -28,6 +31,21 @@ export interface ScoreResult {
   nearby_gyms: NearbyGym[];
 }
 
+export interface Competitor {
+  name: string;
+  lat: number;
+  lng: number;
+  rating?: number;
+}
+
+export interface CensusTract {
+  lat: number;
+  lng: number;
+  population: number;
+  pct_age_18_34: number;
+  median_income: number;
+}
+
 export async function fetchGyms(): Promise<Gym[]> {
   const res = await fetch(`${API_BASE}/api/gyms`);
   if (!res.ok) throw new Error("Failed to fetch gyms");
@@ -43,4 +61,18 @@ export async function scoreLocation(lat: number, lng: number): Promise<ScoreResu
   });
   if (!res.ok) throw new Error("Failed to score location");
   return res.json() as Promise<ScoreResult>;
+}
+
+export async function fetchCompetitors(lat: number, lng: number, radiusMiles = 10): Promise<Competitor[]> {
+  const res = await fetch(`${API_BASE}/api/competitors?lat=${lat}&lng=${lng}&radius_miles=${radiusMiles}`);
+  if (!res.ok) throw new Error("Failed to fetch competitors");
+  const data = await res.json();
+  return data.competitors as Competitor[];
+}
+
+export async function fetchCensusDensity(): Promise<CensusTract[]> {
+  const res = await fetch(`${API_BASE}/api/census-density`);
+  if (!res.ok) throw new Error("Census data not available");
+  const data = await res.json();
+  return data.tracts as CensusTract[];
 }
