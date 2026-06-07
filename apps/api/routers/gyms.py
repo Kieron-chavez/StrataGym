@@ -33,19 +33,21 @@ def _get_census_tracts() -> list[dict]:
 
     census    = pd.read_csv(census_path, dtype={"geoid": str})
     centroids = pd.read_csv(centroids_path, dtype={"geoid": str})
+    age_col = "pct_age_25_44" if "pct_age_25_44" in census.columns else "pct_age_18_34"
     merged = centroids.merge(
-        census[["geoid", "total_population", "pct_age_18_34", "median_household_income"]],
+        census[["geoid", "total_population", "median_age", "median_household_income", age_col]],
         on="geoid", how="left",
-    ).dropna(subset=["centroid_lat", "centroid_lon", "pct_age_18_34"])
-    merged = merged.fillna({"total_population": 0, "median_household_income": 0})
+    ).dropna(subset=["centroid_lat", "centroid_lon", age_col])
+    merged = merged.fillna({"total_population": 0, "median_household_income": 0, "median_age": 0})
 
     tracts = [
         {
-            "lat":          float(row.centroid_lat),
-            "lng":          float(row.centroid_lon),
-            "population":   int(row.total_population),
-            "pct_age_18_34": float(row.pct_age_18_34),
-            "median_income": int(row.median_household_income),
+            "lat":           float(row.centroid_lat),
+            "lng":           float(row.centroid_lon),
+            "population":    int(row.total_population),
+            "pct_age_target": float(getattr(row, age_col)),
+            "median_income":  int(row.median_household_income),
+            "median_age":     float(row.median_age),
         }
         for row in merged.itertuples()
     ]
@@ -83,10 +85,11 @@ def get_gym_analysis(gym_id: str):
     ]
     total_pop = sum(t["population"] for t in in_trade)
     if total_pop > 0:
-        w_income  = sum(t["median_income"]   * t["population"] for t in in_trade) / total_pop
-        w_age_pct = sum(t["pct_age_18_34"]   * t["population"] for t in in_trade) / total_pop
+        w_income    = sum(t["median_income"]    * t["population"] for t in in_trade) / total_pop
+        w_age_pct   = sum(t["pct_age_target"]   * t["population"] for t in in_trade) / total_pop
+        w_median_age = sum(t["median_age"]      * t["population"] for t in in_trade) / total_pop
     else:
-        w_income = w_age_pct = 0
+        w_income = w_age_pct = w_median_age = 0
 
     # Nearby EOS locations (real distances)
     nearby_eos = sorted(
@@ -124,7 +127,7 @@ def get_gym_analysis(gym_id: str):
         "trade_area": {
             "population":    total_pop,
             "median_income": round(w_income),
-            "pct_age_18_34": round(w_age_pct * 100, 1),
+            "median_age":    round(w_median_age, 1),
         },
         "nearby_eos":         nearby_eos,
         "nearby_competitors": nearby_competitors,

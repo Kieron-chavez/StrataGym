@@ -54,7 +54,7 @@ export interface GymAnalysis {
   trade_area: {
     population: number;
     median_income: number;
-    pct_age_18_34: number;
+    median_age: number;
   };
   nearby_eos: Array<{
     gym_id: string;

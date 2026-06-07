@@ -53,20 +53,24 @@ VARIABLES = {
     "B15003_025E": "doctorate_degree",
     # Age denominator
     "B01001_001E": "total_pop_age_denom",
-    # Males 18-34
+    # Males 18-44
     "B01001_007E": "male_18_19",
     "B01001_008E": "male_20",
     "B01001_009E": "male_21",
     "B01001_010E": "male_22_24",
     "B01001_011E": "male_25_29",
     "B01001_012E": "male_30_34",
-    # Females 18-34
+    "B01001_013E": "male_35_39",
+    "B01001_014E": "male_40_44",
+    # Females 18-44
     "B01001_031E": "female_18_19",
     "B01001_032E": "female_20",
     "B01001_033E": "female_21",
     "B01001_034E": "female_22_24",
     "B01001_035E": "female_25_29",
     "B01001_036E": "female_30_34",
+    "B01001_037E": "female_35_39",
+    "B01001_038E": "female_40_44",
 }
 
 
@@ -120,6 +124,15 @@ def pull_county(state_fips: str, county_fips: str, county_name: str) -> pd.DataF
             df["female_18_19"].fillna(0) + df["female_20"].fillna(0) +
             df["female_21"].fillna(0)  + df["female_22_24"].fillna(0) +
             df["female_25_29"].fillna(0) + df["female_30_34"].fillna(0)
+        ) / pd.to_numeric(df["total_pop_age_denom"], errors="coerce").replace(0, float("nan"))
+    ).round(4)
+
+    df["pct_age_25_44"] = (
+        (
+            df["male_25_29"].fillna(0)   + df["male_30_34"].fillna(0) +
+            df["male_35_39"].fillna(0)   + df["male_40_44"].fillna(0) +
+            df["female_25_29"].fillna(0) + df["female_30_34"].fillna(0) +
+            df["female_35_39"].fillna(0) + df["female_40_44"].fillna(0)
         ) / pd.to_numeric(df["total_pop_age_denom"], errors="coerce").replace(0, float("nan"))
     ).round(4)
 

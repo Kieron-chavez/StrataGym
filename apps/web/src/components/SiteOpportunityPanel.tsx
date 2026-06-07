@@ -31,12 +31,14 @@ function StatCard({
   value,
   sub,
   accent,
+  fake,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string | number;
   sub?: string;
   accent?: string;
+  fake?: boolean;
 }) {
   return (
     <div className="bg-[#112236] rounded-xl p-4 flex flex-col gap-1.5">
@@ -44,10 +46,16 @@ function StatCard({
         {icon}
         {label}
       </div>
-      <div className={cn("text-2xl font-bold", accent ?? "text-white")}>{value}</div>
+      <div className={cn("text-2xl font-bold", accent ?? "text-white")}>
+        {value}{fake && <FakeBadge />}
+      </div>
       {sub && <div className="text-xs text-slate-500">{sub}</div>}
     </div>
   );
+}
+
+function FakeBadge() {
+  return <span className="text-amber-400/50 text-[10px] font-bold ml-0.5 select-none">*</span>;
 }
 
 function LoadingSpinner({ label = "Loading…" }: { label?: string }) {
@@ -77,7 +85,7 @@ function ScoreRing({ score }: { score: number }) {
           strokeLinecap="round"
         />
       </svg>
-      <span className="absolute text-lg font-bold" style={{ color }}>{score}</span>
+      <span className="absolute text-lg font-bold" style={{ color }}>{score}<FakeBadge /></span>
     </div>
   );
 }
@@ -127,6 +135,7 @@ function SiteOpportunityView({
           value={result.projected_checkins.toLocaleString()}
           sub="per month"
           accent="text-blue-400"
+          fake
         />
         <StatCard
           icon={<AlertTriangle size={12} />}
@@ -134,6 +143,7 @@ function SiteOpportunityView({
           value={`${result.cannibalization_risk}%`}
           sub="member overlap"
           accent={result.cannibalization_risk > 30 ? "text-red-400" : "text-amber-400"}
+          fake
         />
       </div>
 
@@ -143,6 +153,7 @@ function SiteOpportunityView({
         value={`+${result.net_network_impact.toLocaleString()}`}
         sub="incremental check-ins / month"
         accent="text-green-400"
+        fake
       />
 
       {result.nearby_gyms.length > 0 && (
@@ -217,11 +228,11 @@ function LocationAnalysisView({
         <div className="flex gap-4 mt-3">
           <div>
             <p className="text-xs text-slate-500">Members</p>
-            <p className="text-sm font-bold text-blue-400">{gym.monthly_members.toLocaleString()}</p>
+            <p className="text-sm font-bold text-blue-400">{gym.monthly_members.toLocaleString()}<FakeBadge /></p>
           </div>
           <div>
             <p className="text-xs text-slate-500">Check-ins/mo</p>
-            <p className="text-sm font-bold text-blue-400">{gym.monthly_checkins.toLocaleString()}</p>
+            <p className="text-sm font-bold text-blue-400">{gym.monthly_checkins.toLocaleString()}<FakeBadge /></p>
           </div>
           {gym.rating && (
             <div>
@@ -249,7 +260,7 @@ function LocationAnalysisView({
                   TIER_STYLES[analysis.performance_tier]
                 )}
               >
-                {TIER_LABELS[analysis.performance_tier]}
+                {TIER_LABELS[analysis.performance_tier]}<FakeBadge />
               </span>
             </div>
             <div className="text-right">
@@ -257,6 +268,7 @@ function LocationAnalysisView({
               <p className="text-lg font-bold text-white">
                 {analysis.performance_rank_pct}
                 <span className="text-xs text-slate-400 font-normal">th %ile</span>
+                <FakeBadge />
               </p>
             </div>
           </div>
@@ -267,7 +279,7 @@ function LocationAnalysisView({
             <div>
               <p className="text-xs text-slate-500">Opened</p>
               <p className="text-sm text-white font-medium">
-                {formatOpenDate(analysis.open_date)}
+                {formatOpenDate(analysis.open_date)}<FakeBadge />
               </p>
             </div>
           </div>
@@ -299,10 +311,10 @@ function LocationAnalysisView({
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-1 text-slate-500">
                   <Activity size={10} />
-                  <span className="text-xs">Age 18–34</span>
+                  <span className="text-xs">Median Age</span>
                 </div>
                 <p className="text-sm font-bold text-white">
-                  {analysis.trade_area.pct_age_18_34}%
+                  {analysis.trade_area.median_age} yrs
                 </p>
               </div>
             </div>

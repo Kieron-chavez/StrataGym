@@ -146,9 +146,9 @@ export default function MapView({
                       font-family:inherit;font-size:12px;min-width:160px;">
             <div style="font-weight:600;margin-bottom:6px;color:#fff">${gym.name}</div>
             <div style="color:#94a3b8;margin-bottom:2px">Members:
-              <span style="color:#60a5fa">${gym.monthly_members.toLocaleString()}</span></div>
+              <span style="color:#60a5fa">${gym.monthly_members.toLocaleString()}</span><span style="color:#f59e0b;font-size:9px;font-weight:700;opacity:0.55"> *</span></div>
             <div style="color:#94a3b8">Check-ins:
-              <span style="color:#60a5fa">${gym.monthly_checkins.toLocaleString()}</span></div>
+              <span style="color:#60a5fa">${gym.monthly_checkins.toLocaleString()}</span><span style="color:#f59e0b;font-size:9px;font-weight:700;opacity:0.55"> *</span></div>
             ${gym.rating ? `<div style="color:#94a3b8;margin-top:2px">★ ${gym.rating}</div>` : ""}
           </div>`);
 
@@ -362,5 +362,49 @@ export default function MapView({
     return clean;
   }, [layers]);
 
-  return <div ref={containerRef} className="flex-1 relative h-full" />;
+  const memberDensityActive = layers.find((l) => l.id === "member-density")?.active ?? false;
+
+  return (
+    <div ref={containerRef} className="flex-1 relative h-full">
+      {memberDensityActive && (
+        <div className="absolute bottom-8 left-3 z-10 bg-[#0d1b2a]/90 border border-white/10 rounded-lg px-3 py-2.5 backdrop-blur-sm pointer-events-none">
+          <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wide mb-2">Member Density</p>
+          <div className="mb-2.5">
+            <p className="text-[9px] text-slate-500 uppercase tracking-wide mb-1.5">Population</p>
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#3b82f6] opacity-55 shrink-0" />
+                <span className="text-[10px] text-slate-400">Low</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3.5 h-3.5 rounded-full bg-[#3b82f6] opacity-55 shrink-0" />
+                <span className="text-[10px] text-slate-400">Medium</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded-full bg-[#3b82f6] opacity-55 shrink-0" />
+                <span className="text-[10px] text-slate-400">High</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p className="text-[9px] text-slate-500 uppercase tracking-wide mb-1.5">% Ages 18–34</p>
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full shrink-0" style={{ background: "#0f2942", opacity: 0.85 }} />
+                <span className="text-[10px] text-slate-400">Low</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full shrink-0" style={{ background: "#1d4ed8", opacity: 0.85 }} />
+                <span className="text-[10px] text-slate-400">Moderate</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full shrink-0" style={{ background: "#06b6d4", opacity: 0.85 }} />
+                <span className="text-[10px] text-slate-400">High</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
