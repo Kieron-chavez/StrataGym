@@ -14,5 +14,13 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "overrides": {
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "dependencies": {
+    "react": "^19",
+    "react-dom": "^19"
   }
 }
