@@ -7,8 +7,8 @@ import LayerToggleBar from "@/components/LayerToggleBar";
 import SiteOpportunityPanel, {
   PanelToggleButton,
 } from "@/components/SiteOpportunityPanel";
-import { fetchGyms, scoreLocation } from "@/lib/api";
-import type { Gym, ScoreResult } from "@/lib/api";
+import { fetchGyms, fetchGymAnalysis, scoreLocation } from "@/lib/api";
+import type { Gym, GymAnalysis, ScoreResult } from "@/lib/api";
 import type { Layer, LayerId } from "@/types";
 
 const MapView = dynamic(() => import("@/components/MapView"), { ssr: false });
@@ -23,13 +23,16 @@ const INITIAL_LAYERS: Layer[] = [
 export default function DashboardPage() {
   const [gyms, setGyms] = useState<Gym[]>([]);
   const [layers, setLayers] = useState<Layer[]>(INITIAL_LAYERS);
-  const [scoreResult, setScoreResult] = useState<ScoreResult | null>(null);
-  const [scoring, setScoring] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
-  const [selectedPin, setSelectedPin] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
+
+  // Mutually exclusive selection states
+  const [selectedLocation, setSelectedLocation] = useState<Gym | null>(null);
+  const [selectedSite, setSelectedSite] = useState<{ lat: number; lng: number } | null>(null);
+
+  // One result type is active at a time depending on which state is set
+  const [scoreResult, setScoreResult] = useState<ScoreResult | null>(null);
+  const [gymAnalysis, setGymAnalysis] = useState<GymAnalysis | null>(null);
 
   useEffect(() => {
     fetchGyms()
@@ -44,40 +47,64 @@ export default function DashboardPage() {
   }, []);
 
   const handleMapClick = useCallback(async (lat: number, lng: number) => {
-    setSelectedPin({ lat, lng });
-    setPanelOpen(true);
-    setScoring(true);
+    setSelectedSite({ lat, lng });
+    setSelectedLocation(null);
+    setGymAnalysis(null);
     setScoreResult(null);
-
+    setPanelOpen(true);
+    setLoading(true);
     try {
       const result = await scoreLocation(lat, lng);
       setScoreResult(result);
     } catch (err) {
       console.error("Failed to score location:", err);
     } finally {
-      setScoring(false);
+      setLoading(false);
     }
+  }, []);
+
+  const handleGymClick = useCallback(async (gym: Gym) => {
+    setSelectedLocation(gym);
+    setSelectedSite(null);
+    setScoreResult(null);
+    setGymAnalysis(null);
+    setPanelOpen(true);
+    setLoading(true);
+    try {
+      const analysis = await fetchGymAnalysis(gym.gym_id);
+      setGymAnalysis(analysis);
+    } catch (err) {
+      console.error("Failed to fetch gym analysis:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const handleClearSelection = useCallback(() => {
+    setSelectedLocation(null);
+    setSelectedSite(null);
+    setScoreResult(null);
+    setGymAnalysis(null);
+    setPanelOpen(false);
   }, []);
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#0D1B2A]">
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Map area */}
       <div className="relative flex-1 flex flex-col">
-        {/* Layer toggle bar */}
         <LayerToggleBar layers={layers} onToggle={handleToggleLayer} />
 
-        {/* Map */}
         <MapView
           gyms={gyms}
           layers={layers}
           onMapClick={handleMapClick}
-          selectedPin={selectedPin}
+          onGymClick={handleGymClick}
+          onClearSelection={handleClearSelection}
+          selectedLocation={selectedLocation}
+          selectedSite={selectedSite}
         />
 
-        {/* Panel toggle button (visible when panel is closed) */}
         {!panelOpen && (
           <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10">
             <PanelToggleButton
@@ -88,12 +115,13 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Right panel */}
       {panelOpen && (
         <SiteOpportunityPanel
-          result={scoreResult}
-          loading={scoring}
           isOpen={panelOpen}
+          loading={loading}
+          selectedGym={selectedLocation}
+          gymAnalysis={gymAnalysis}
+          scoreResult={scoreResult}
           onClose={() => setPanelOpen(false)}
         />
       )}

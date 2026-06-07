@@ -10,7 +10,10 @@ interface Props {
   gyms: Gym[];
   layers: Layer[];
   onMapClick: (lat: number, lng: number) => void;
-  selectedPin: { lat: number; lng: number } | null;
+  onGymClick: (gym: Gym) => void;
+  onClearSelection: () => void;
+  selectedLocation: Gym | null;
+  selectedSite: { lat: number; lng: number } | null;
 }
 
 // Remove a GL layer/source if present — guard against uninitialized or removed map
@@ -29,7 +32,15 @@ function beforeSymbol(map: mapboxgl.Map): string | undefined {
     .find((l) => l.type === "symbol")?.id;
 }
 
-export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props) {
+export default function MapView({
+  gyms,
+  layers,
+  onMapClick,
+  onGymClick,
+  onClearSelection,
+  selectedLocation,
+  selectedSite,
+}: Props) {
   const containerRef  = useRef<HTMLDivElement>(null);
   const mapRef        = useRef<mapboxgl.Map | null>(null);
   const markersRef    = useRef<mapboxgl.Marker[]>([]);
@@ -42,7 +53,6 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
   const competitorDataRef   = useRef<Competitor[] | null>(null);
 
   // ── Eager pre-fetch census + competitor data once map is ready ──────────────
-  // Drive-time isochrones (44 calls) stay lazy — only fetched when that layer is toggled.
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
@@ -88,14 +98,26 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ── Map click ───────────────────────────────────────────────────────────────
+  // ── Map click — background only; gym marker clicks stop propagation ─────────
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    const handleClick = (e: mapboxgl.MapMouseEvent) => onMapClick(e.lngLat.lat, e.lngLat.lng);
+    const handleClick = (e: mapboxgl.MapMouseEvent) => {
+      const clickPx = e.point;
+      // Exclude clicks within 20px of any gym pin center (near-miss guard)
+      const nearGym = gyms.some((g) => {
+        const pt = map.project([g.lng, g.lat]);
+        return Math.hypot(pt.x - clickPx.x, pt.y - clickPx.y) < 20;
+      });
+      if (nearGym) {
+        onClearSelection();
+      } else {
+        onMapClick(e.lngLat.lat, e.lngLat.lng);
+      }
+    };
     map.on("click", handleClick);
     return () => { map.off("click", handleClick); };
-  }, [onMapClick]);
+  }, [gyms, onMapClick, onClearSelection]);
 
   // ── EOS gym markers ─────────────────────────────────────────────────────────
   useEffect(() => {
@@ -109,9 +131,15 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
 
     const add = () => {
       gyms.forEach((gym) => {
-        const el = Object.assign(document.createElement("div"), { style: "" });
-        el.style.cssText = `width:18px;height:18px;border-radius:50%;background:#3B82F6;
-          border:2.5px solid #fff;box-shadow:0 0 0 3px rgba(59,130,246,0.4);cursor:pointer;`;
+        const isSelected = selectedLocation?.gym_id === gym.gym_id;
+        const el = document.createElement("div");
+        el.style.cssText = isSelected
+          ? `width:22px;height:22px;border-radius:50%;background:#60a5fa;
+             border:3px solid #fff;cursor:pointer;
+             box-shadow:0 0 0 5px rgba(96,165,250,0.5),0 0 20px rgba(96,165,250,0.4);`
+          : `width:18px;height:18px;border-radius:50%;background:#3B82F6;
+             border:2.5px solid #fff;cursor:pointer;
+             box-shadow:0 0 0 3px rgba(59,130,246,0.4);`;
 
         const popup = new mapboxgl.Popup({ offset: 12, closeButton: false }).setHTML(`
           <div style="background:#112236;color:#e2e8f0;padding:10px 12px;border-radius:8px;
@@ -126,6 +154,11 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
 
         const marker = new mapboxgl.Marker({ element: el })
           .setLngLat([gym.lng, gym.lat]).setPopup(popup).addTo(map);
+
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          onGymClick(gym);
+        });
         el.addEventListener("mouseenter", () => marker.togglePopup());
         el.addEventListener("mouseleave", () => { if (marker.getPopup()?.isOpen()) marker.togglePopup(); });
         markersRef.current.push(marker);
@@ -134,21 +167,21 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
 
     map.isStyleLoaded() ? add() : map.once("load", add);
     return () => { markersRef.current.forEach((m) => m.remove()); markersRef.current = []; };
-  }, [gyms, layers]);
+  }, [gyms, layers, selectedLocation, onGymClick]);
 
   // ── Candidate pin ───────────────────────────────────────────────────────────
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
     pinMarkerRef.current?.remove();
-    if (!selectedPin) return;
+    if (!selectedSite) return;
 
     const el = document.createElement("div");
     el.style.cssText = `width:20px;height:20px;border-radius:50%;background:#f59e0b;
       border:2.5px solid #fff;box-shadow:0 0 0 4px rgba(245,158,11,0.35),0 0 16px rgba(245,158,11,0.4);`;
     pinMarkerRef.current = new mapboxgl.Marker({ element: el })
-      .setLngLat([selectedPin.lng, selectedPin.lat]).addTo(map);
-  }, [selectedPin]);
+      .setLngLat([selectedSite.lng, selectedSite.lat]).addTo(map);
+  }, [selectedSite]);
 
   // ── Drive time — gym trade areas (15-min isochrones) ────────────────────────
   useEffect(() => {
@@ -209,9 +242,9 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
 
     const run = async () => {
       clean();
-      if (!active || !selectedPin) return;
+      if (!active || !selectedSite) return;
       const data = await fetch(
-        `https://api.mapbox.com/isochrone/v1/mapbox/driving/${selectedPin.lng},${selectedPin.lat}` +
+        `https://api.mapbox.com/isochrone/v1/mapbox/driving/${selectedSite.lng},${selectedSite.lat}` +
         `?contours_minutes=15&polygons=true&access_token=${token}`
       ).then((r) => r.json()).catch(() => null);
       if (cancelled || !data || !map.isStyleLoaded()) return;
@@ -227,7 +260,7 @@ export default function MapView({ gyms, layers, onMapClick, selectedPin }: Props
 
     map.isStyleLoaded() ? run() : map.once("load", run);
     return () => { cancelled = true; clean(); };
-  }, [layers, selectedPin]);
+  }, [layers, selectedSite]);
 
   // ── Competitors layer ───────────────────────────────────────────────────────
   useEffect(() => {

@@ -46,6 +46,30 @@ export interface CensusTract {
   median_income: number;
 }
 
+export interface GymAnalysis {
+  gym_id: string;
+  open_date: string;
+  performance_tier: "Top Performer" | "Average" | "Underperforming";
+  performance_rank_pct: number;
+  trade_area: {
+    population: number;
+    median_income: number;
+    pct_age_18_34: number;
+  };
+  nearby_eos: Array<{
+    gym_id: string;
+    name: string;
+    distance_miles: number;
+  }>;
+  nearby_competitors: Array<{
+    name: string;
+    lat: number;
+    lng: number;
+    rating?: number;
+    distance_miles: number;
+  }>;
+}
+
 export async function fetchGyms(): Promise<Gym[]> {
   const res = await fetch(`${API_BASE}/api/gyms`);
   if (!res.ok) throw new Error("Failed to fetch gyms");
@@ -61,6 +85,12 @@ export async function scoreLocation(lat: number, lng: number): Promise<ScoreResu
   });
   if (!res.ok) throw new Error("Failed to score location");
   return res.json() as Promise<ScoreResult>;
+}
+
+export async function fetchGymAnalysis(gymId: string): Promise<GymAnalysis> {
+  const res = await fetch(`${API_BASE}/api/gyms/${gymId}/analysis`);
+  if (!res.ok) throw new Error("Failed to fetch gym analysis");
+  return res.json() as Promise<GymAnalysis>;
 }
 
 export async function fetchCompetitors(lat: number, lng: number, radiusMiles = 10): Promise<Competitor[]> {

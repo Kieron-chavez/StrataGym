@@ -2,19 +2,17 @@ from __future__ import annotations
 import time
 import unicodedata
 import requests
+import cache
 from fastapi import APIRouter, HTTPException
 from config import GOOGLE_API_KEY
 
 router = APIRouter()
 
-_cache: list[dict] | None = None
-
 
 @router.get("/api/competitors")
 def get_competitors(lat: float = 33.45, lng: float = -112.0, radius_miles: float = 30.0):
-    global _cache
-    if _cache is not None:
-        return {"competitors": _cache, "count": len(_cache)}
+    if cache.competitors is not None:
+        return {"competitors": cache.competitors, "count": len(cache.competitors)}
 
     if not GOOGLE_API_KEY:
         raise HTTPException(status_code=503, detail="GOOGLE_API_KEY not configured")
@@ -64,5 +62,5 @@ def get_competitors(lat: float = 33.45, lng: float = -112.0, radius_miles: float
         if not page_token:
             break
 
-    _cache = all_results
+    cache.competitors = all_results
     return {"competitors": all_results, "count": len(all_results)}
