@@ -384,7 +384,7 @@ function LocationAnalysisView({
 
 // ── Main panel ────────────────────────────────────────────────────────────────
 
-export default function SiteOpportunityPanel({
+export default function AnalysisPanel({
   isOpen,
   loading,
   selectedGym,
@@ -422,7 +422,7 @@ export default function SiteOpportunityPanel({
   );
 }
 
-export function PanelToggleButton({
+export function AnalysisPanelToggle({
   isOpen,
   onClick,
 }: {

@@ -3,10 +3,10 @@
 import { useEffect, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import Sidebar from "@/components/Sidebar";
-import LayerToggleBar from "@/components/LayerToggleBar";
-import SiteOpportunityPanel, {
-  PanelToggleButton,
-} from "@/components/SiteOpportunityPanel";
+import TopBar from "@/components/TopBar";
+import AnalysisPanel, {
+  AnalysisPanelToggle,
+} from "@/components/AnalysisPanel";
 import { fetchGyms, fetchGymAnalysis, scoreLocation } from "@/lib/api";
 import type { Gym, GymAnalysis, ScoreResult } from "@/lib/api";
 import type { Layer, LayerId } from "@/types";
@@ -16,7 +16,8 @@ const MapView = dynamic(() => import("@/components/MapView"), { ssr: false });
 const INITIAL_LAYERS: Layer[] = [
   { id: "gym-locations", label: "Gym Locations", active: true },
   { id: "member-density", label: "Member Density", active: false },
-  { id: "drive-time", label: "Drive Time", active: false },
+  { id: "drive-time", label: "Drive Time · 10 min", active: false },
+  { id: "drive-time-25", label: "Drive Time · 25 min", active: false },
   { id: "competitors", label: "Competitors", active: false },
 ];
 
@@ -90,41 +91,47 @@ export default function DashboardPage() {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#0D1B2A]">
+      {/* Sidebar spans full height */}
       <Sidebar />
 
-      <div className="relative flex-1 flex flex-col">
-        <LayerToggleBar layers={layers} onToggle={handleToggleLayer} />
+      {/* Right column: top bar + map/panel beneath */}
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <TopBar layers={layers} onToggle={handleToggleLayer} />
 
-        <MapView
-          gyms={gyms}
-          layers={layers}
-          onMapClick={handleMapClick}
-          onGymClick={handleGymClick}
-          onClearSelection={handleClearSelection}
-          selectedLocation={selectedLocation}
-          selectedSite={selectedSite}
-        />
-
-        {!panelOpen && (
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10">
-            <PanelToggleButton
-              isOpen={false}
-              onClick={() => setPanelOpen(true)}
+        <div className="flex flex-1 overflow-hidden">
+          <div className="relative flex-1">
+            <MapView
+              gyms={gyms}
+              layers={layers}
+              onMapClick={handleMapClick}
+              onGymClick={handleGymClick}
+              onClearSelection={handleClearSelection}
+              selectedLocation={selectedLocation}
+              selectedSite={selectedSite}
             />
-          </div>
-        )}
-      </div>
 
-      {panelOpen && (
-        <SiteOpportunityPanel
-          isOpen={panelOpen}
-          loading={loading}
-          selectedGym={selectedLocation}
-          gymAnalysis={gymAnalysis}
-          scoreResult={scoreResult}
-          onClose={() => setPanelOpen(false)}
-        />
-      )}
+            {!panelOpen && (
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10">
+                <AnalysisPanelToggle
+                  isOpen={false}
+                  onClick={() => setPanelOpen(true)}
+                />
+              </div>
+            )}
+          </div>
+
+          {panelOpen && (
+            <AnalysisPanel
+              isOpen={panelOpen}
+              loading={loading}
+              selectedGym={selectedLocation}
+              gymAnalysis={gymAnalysis}
+              scoreResult={scoreResult}
+              onClose={() => setPanelOpen(false)}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

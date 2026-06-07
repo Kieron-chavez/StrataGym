@@ -48,7 +48,8 @@ export default function MapView({
   const competitorMarkersRef = useRef<mapboxgl.Marker[]>([]);
 
   // Caches — populated eagerly on load; prevents re-fetching on every layer toggle
-  const driveTimeGeojsonRef = useRef<object | null>(null);
+  const driveTimeGeojsonRef    = useRef<object | null>(null);
+  const driveTime25GeojsonRef  = useRef<object | null>(null);
   const censusTractsRef     = useRef<CensusTract[] | null>(null);
   const competitorDataRef   = useRef<Competitor[] | null>(null);
 
@@ -255,6 +256,85 @@ export default function MapView({
         map.addSource(SRC, { type: "geojson", data });
         map.addLayer({ id: FILL, type: "fill", source: SRC, paint: { "fill-color": "#F59E0B", "fill-opacity": 0.14 } }, before);
         map.addLayer({ id: LINE, type: "line", source: SRC, paint: { "line-color": "#F59E0B", "line-width": 1.5, "line-opacity": 0.6 } }, before);
+      } catch { /* concurrent run beat us here */ }
+    };
+
+    map.isStyleLoaded() ? run() : map.once("load", run);
+    return () => { cancelled = true; clean(); };
+  }, [layers, selectedSite]);
+
+  // ── Drive time — gym trade areas (25-min isochrones) ────────────────────────
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    let cancelled = false;
+
+    const active = layers.find((l) => l.id === "drive-time-25")?.active;
+    const token  = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
+    const SRC = "sg-drive-time-25"; const FILL = "sg-dt25-fill"; const LINE = "sg-dt25-line";
+    const clean = () => removeLayers(map, [FILL, LINE], SRC);
+
+    const run = async () => {
+      if (!active || !gyms.length) { clean(); return; }
+
+      let geojson = driveTime25GeojsonRef.current;
+
+      if (!geojson) {
+        const results = await Promise.allSettled(
+          gyms.map((g) =>
+            fetch(`https://api.mapbox.com/isochrone/v1/mapbox/driving/${g.lng},${g.lat}` +
+                  `?contours_minutes=25&polygons=true&access_token=${token}`)
+              .then((r) => r.json())
+          )
+        );
+        if (cancelled) return;
+        const features = results
+          .filter((r): r is PromiseFulfilledResult<{ features?: unknown[] }> => r.status === "fulfilled")
+          .flatMap((r) => (r.value?.features as object[]) ?? []);
+        geojson = { type: "FeatureCollection", features };
+        driveTime25GeojsonRef.current = geojson;
+      }
+
+      if (cancelled) return;
+      clean();
+      const before = beforeSymbol(map);
+      try {
+        map.addSource(SRC, { type: "geojson", data: geojson as object as GeoJSON.FeatureCollection });
+        map.addLayer({ id: FILL, type: "fill", source: SRC, paint: { "fill-color": "#8B5CF6", "fill-opacity": 0.07 } }, before);
+        map.addLayer({ id: LINE, type: "line", source: SRC, paint: { "line-color": "#8B5CF6", "line-width": 1, "line-opacity": 0.35 } }, before);
+      } catch { /* concurrent run beat us here */ }
+    };
+
+    map.isStyleLoaded() ? run() : map.once("load", run);
+    return () => { cancelled = true; clean(); };
+  }, [layers, gyms]);
+
+  // ── Drive time 25-min — candidate pin trade area ─────────────────────────────
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    let cancelled = false;
+
+    const active = layers.find((l) => l.id === "drive-time-25")?.active;
+    const token  = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
+    const SRC = "sg-dt25-cand"; const FILL = "sg-dt25-cand-fill"; const LINE = "sg-dt25-cand-line";
+    const clean = () => removeLayers(map, [FILL, LINE], SRC);
+
+    const run = async () => {
+      clean();
+      if (!active || !selectedSite) return;
+      const data = await fetch(
+        `https://api.mapbox.com/isochrone/v1/mapbox/driving/${selectedSite.lng},${selectedSite.lat}` +
+        `?contours_minutes=25&polygons=true&access_token=${token}`
+      ).then((r) => r.json()).catch(() => null);
+      if (cancelled || !data || !map.isStyleLoaded()) return;
+
+      clean();
+      const before = beforeSymbol(map);
+      try {
+        map.addSource(SRC, { type: "geojson", data });
+        map.addLayer({ id: FILL, type: "fill", source: SRC, paint: { "fill-color": "#8B5CF6", "fill-opacity": 0.14 } }, before);
+        map.addLayer({ id: LINE, type: "line", source: SRC, paint: { "line-color": "#8B5CF6", "line-width": 1.5, "line-opacity": 0.6 } }, before);
       } catch { /* concurrent run beat us here */ }
     };
 
