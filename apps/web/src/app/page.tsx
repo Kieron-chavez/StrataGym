@@ -92,7 +92,11 @@ export default function DashboardPage() {
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#0D1B2A]">
       {/* Sidebar spans full height */}
-      <Sidebar />
+      <Sidebar
+        gymCount={String(gyms.length)}
+        totalMembers={gyms.reduce((s, g) => s + g.monthly_members, 0).toLocaleString()}
+        monthlyRevenue={"$" + (gyms.reduce((s, g) => s + g.monthly_members, 0) * 35).toLocaleString()}
+      />
 
       {/* Right column: top bar + map/panel beneath */}
       <div className="flex flex-col flex-1 overflow-hidden">

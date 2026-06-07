@@ -20,7 +20,13 @@ const NAV_ITEMS = [
   { id: "revenue-trends", label: "Revenue Trends", icon: BarChart2 },
 ] as const;
 
-export default function Sidebar() {
+interface SidebarProps {
+  gymCount: string;
+  totalMembers: string;
+  monthlyRevenue: string;
+}
+
+export default function Sidebar({ gymCount, totalMembers, monthlyRevenue }: SidebarProps) {
   const [active, setActive] = useState("network-map");
 
   return (
@@ -56,6 +62,25 @@ export default function Sidebar() {
           </button>
         ))}
       </nav>
+
+      {/* Network Overview */}
+      <div className="px-4 py-3 border-t border-white/5">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-3">Network Overview</p>
+        <div className="grid grid-cols-2 gap-2 mb-2">
+          <div className="bg-white/5 rounded-lg px-3 py-2.5">
+            <p className="text-lg font-bold text-white leading-none tabular-nums">{gymCount}</p>
+            <p className="text-[10px] text-slate-500 mt-1.5 uppercase tracking-wide">Gyms</p>
+          </div>
+          <div className="bg-white/5 rounded-lg px-3 py-2.5">
+            <p className="text-lg font-bold text-white leading-none tabular-nums">{totalMembers}</p>
+            <p className="text-[10px] text-slate-500 mt-1.5 uppercase tracking-wide">Members</p>
+          </div>
+        </div>
+        <div className="bg-white/5 rounded-lg px-3 py-2.5">
+          <p className="text-lg font-bold text-emerald-400 leading-none tabular-nums">{monthlyRevenue}</p>
+          <p className="text-[10px] text-slate-500 mt-1.5 uppercase tracking-wide">Monthly Revenue</p>
+        </div>
+      </div>
 
       {/* Footer */}
       <div className="px-5 py-4 border-t border-white/5">
