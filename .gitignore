@@ -47,3 +47,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ML generated artifacts (directories are tracked via .gitkeep)
+ml/data/processed/*
+!ml/data/processed/.gitkeep
+ml/outputs/charts/*
+!ml/outputs/charts/.gitkeep
+ml/outputs/reports/*
+!ml/outputs/reports/.gitkeep
+ml/models/*
+!ml/models/.gitkeep
