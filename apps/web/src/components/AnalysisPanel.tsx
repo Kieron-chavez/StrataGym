@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import {
   ChevronRight,
   X,
@@ -64,26 +65,6 @@ function LoadingSpinner({ label = "Loading…" }: { label?: string }) {
 
 // ── Site Opportunity view (proposed site click) ───────────────────────────────
 
-function ScoreRing({ score }: { score: number }) {
-  const radius = 28;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (score / 100) * circumference;
-  const color = score >= 75 ? "#22c55e" : score >= 50 ? "#f59e0b" : "#ef4444";
-  return (
-    <div className="relative flex items-center justify-center w-20 h-20">
-      <svg width="80" height="80" className="-rotate-90">
-        <circle cx="40" cy="40" r={radius} fill="none" stroke="#1e3a54" strokeWidth="6" />
-        <circle
-          cx="40" cy="40" r={radius} fill="none"
-          stroke={color} strokeWidth="6"
-          strokeDasharray={circumference} strokeDashoffset={offset}
-          strokeLinecap="round"
-        />
-      </svg>
-      <span className="absolute text-lg font-bold" style={{ color }}>{score}<FakeBadge /></span>
-    </div>
-  );
-}
 
 function SiteOpportunityView({
   result,
@@ -112,18 +93,21 @@ function SiteOpportunityView({
         <span>{result.lat.toFixed(4)}, {result.lng.toFixed(4)}</span>
       </div>
 
-      <div className="bg-[#112236] rounded-xl p-4 flex items-center gap-4">
-        <ScoreRing score={result.opportunity_score} />
-        <div>
-          <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-0.5">
-            Opportunity Score
-          </p>
-          <p className="text-sm text-green-400 font-semibold">Strong site</p>
-          <p className="text-xs text-slate-500 mt-1">Top 20% of candidates</p>
-        </div>
-      </div>
-
       <div className="grid grid-cols-2 gap-3">
+        <StatCard
+          icon={<Activity size={12} />}
+          label="Opportunity Score"
+          value={result.opportunity_score}
+          sub="Top 20% of candidates"
+          accent={
+            result.opportunity_score >= 75
+              ? "text-green-400"
+              : result.opportunity_score >= 50
+              ? "text-amber-400"
+              : "text-red-400"
+          }
+          fake
+        />
         <StatCard
           icon={<TrendingUp size={12} />}
           label="Proj. Check-ins"
@@ -140,38 +124,71 @@ function SiteOpportunityView({
           accent={result.cannibalization_risk > 30 ? "text-red-400" : "text-amber-400"}
           fake
         />
+        <StatCard
+          icon={<Activity size={12} />}
+          label="Net Network Impact"
+          value={`+${result.net_network_impact.toLocaleString()}`}
+          sub="check-ins / month"
+          accent="text-green-400"
+          fake
+        />
       </div>
 
-      <StatCard
-        icon={<Activity size={12} />}
-        label="Net Network Impact"
-        value={`+${result.net_network_impact.toLocaleString()}`}
-        sub="incremental check-ins / month"
-        accent="text-green-400"
-        fake
-      />
-
       {result.nearby_gyms.length > 0 && (
-        <div className="bg-[#112236] rounded-xl p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">
-            Nearby Locations
-          </p>
-          <div className="flex flex-col gap-2">
-            {result.nearby_gyms.map((gym) => (
-              <div key={gym.gym_id} className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
-                  <span className="text-xs text-slate-300 leading-tight">
-                    {gym.name.replace("EOS Fitness – ", "")}
+        <>
+          <div className="bg-[#112236] rounded-xl p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">
+              Nearby Locations
+            </p>
+            <div className="flex flex-col gap-2">
+              {result.nearby_gyms.map((gym) => (
+                <div key={gym.gym_id} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
+                    <span className="text-xs text-slate-300 leading-tight">
+                      {gym.name.replace("EOS Fitness – ", "")}
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-500 tabular-nums">
+                    {gym.distance_miles} mi
                   </span>
                 </div>
-                <span className="text-xs text-slate-500 tabular-nums">
-                  {gym.distance_miles} mi
-                </span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+
+          <div className="bg-[#112236] rounded-xl p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">
+              Nearby Affected Gyms
+            </p>
+            <div className="grid grid-cols-[1fr_auto_auto_auto] gap-x-3 gap-y-2 items-baseline">
+              <span className="text-[10px] text-slate-500 font-medium">Gym</span>
+              <span className="text-[10px] text-slate-500 font-medium text-right">Dist.</span>
+              <span className="text-[10px] text-slate-500 font-medium text-right">Cannib.</span>
+              <span className="text-[10px] text-slate-500 font-medium text-right">Impact</span>
+              {result.nearby_gyms.map((gym) => {
+                const cannibal = Math.max(5, Math.round(38 - gym.distance_miles * 7));
+                const impact = Math.abs(Math.round((6.5 - gym.distance_miles) * 260));
+                return (
+                  <Fragment key={gym.gym_id}>
+                    <span className="text-xs text-slate-300 truncate leading-none">
+                      {gym.name.replace("EOS Fitness – ", "")}
+                    </span>
+                    <span className="text-xs text-slate-500 tabular-nums text-right">
+                      {gym.distance_miles} mi
+                    </span>
+                    <span className="text-xs text-amber-400 tabular-nums text-right">
+                      {cannibal}%<FakeBadge />
+                    </span>
+                    <span className="text-xs text-red-400 tabular-nums text-right font-medium">
+                      -{impact.toLocaleString()}<FakeBadge />
+                    </span>
+                  </Fragment>
+                );
+              })}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
