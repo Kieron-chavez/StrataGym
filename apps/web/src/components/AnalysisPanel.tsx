@@ -7,18 +7,13 @@ import {
   TrendingUp,
   AlertTriangle,
   Activity,
-  Users,
-  Calendar,
-  DollarSign,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Gym, GymAnalysis, ScoreResult } from "@/lib/api";
+import type { ScoreResult } from "@/lib/api";
 
 interface Props {
   isOpen: boolean;
   loading: boolean;
-  selectedGym?: Gym | null;
-  gymAnalysis?: GymAnalysis | null;
   scoreResult?: ScoreResult | null;
   onClose: () => void;
 }
@@ -182,218 +177,14 @@ function SiteOpportunityView({
   );
 }
 
-// ── Location Analysis view (existing EOS pin click) ───────────────────────────
-
-const TIER_STYLES = {
-  "Top Performer":  "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25",
-  "Average":        "bg-amber-500/15  text-amber-400  border border-amber-500/25",
-  "Underperforming":"bg-red-500/15    text-red-400    border border-red-500/25",
-} as const;
-
-const TIER_LABELS = {
-  "Top Performer":  "Top Performer",
-  "Average":        "Average",
-  "Underperforming":"Underperforming",
-} as const;
-
-function formatOpenDate(d: string): string {
-  const [year, month] = d.split("-").map(Number);
-  return new Date(year, month - 1).toLocaleString("default", {
-    month: "long",
-    year: "numeric",
-  });
-}
-
-function LocationAnalysisView({
-  gym,
-  analysis,
-  loading,
-}: {
-  gym: Gym;
-  analysis: GymAnalysis | null;
-  loading: boolean;
-}) {
-  return (
-    <div className="flex flex-col gap-4">
-      {/* Gym identity */}
-      <div className="bg-[#112236] rounded-xl p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-blue-400 shrink-0" />
-          <span className="text-xs font-semibold uppercase tracking-wide text-blue-400">
-            Existing Location
-          </span>
-        </div>
-        <p className="text-white font-semibold text-sm leading-snug">{gym.name}</p>
-        <p className="text-slate-500 text-xs mt-1 leading-snug">{gym.address}</p>
-        <div className="flex gap-4 mt-3">
-          <div>
-            <p className="text-xs text-slate-500">Members</p>
-            <p className="text-sm font-bold text-blue-400">{gym.monthly_members.toLocaleString()}<FakeBadge /></p>
-          </div>
-          <div>
-            <p className="text-xs text-slate-500">Check-ins/mo</p>
-            <p className="text-sm font-bold text-blue-400">{gym.monthly_checkins.toLocaleString()}<FakeBadge /></p>
-          </div>
-          {gym.rating && (
-            <div>
-              <p className="text-xs text-slate-500">Rating</p>
-              <p className="text-sm font-bold text-slate-200">★ {gym.rating}</p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Analysis data */}
-      {loading && <LoadingSpinner label="Loading analysis…" />}
-
-      {!loading && analysis && (
-        <>
-          {/* Performance tier */}
-          <div className="bg-[#112236] rounded-xl p-4 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-slate-400 font-medium uppercase tracking-wide mb-1">
-                Performance Tier
-              </p>
-              <span
-                className={cn(
-                  "inline-block text-xs font-semibold px-2.5 py-1 rounded-full",
-                  TIER_STYLES[analysis.performance_tier]
-                )}
-              >
-                {TIER_LABELS[analysis.performance_tier]}<FakeBadge />
-              </span>
-            </div>
-            <div className="text-right">
-              <p className="text-xs text-slate-500">Network rank</p>
-              <p className="text-lg font-bold text-white">
-                {analysis.performance_rank_pct}
-                <span className="text-xs text-slate-400 font-normal">th %ile</span>
-                <FakeBadge />
-              </p>
-            </div>
-          </div>
-
-          {/* Open date */}
-          <div className="flex items-center gap-3 px-4 py-3 bg-[#112236] rounded-xl">
-            <Calendar size={14} className="text-slate-400 shrink-0" />
-            <div>
-              <p className="text-xs text-slate-500">Opened</p>
-              <p className="text-sm text-white font-medium">
-                {formatOpenDate(analysis.open_date)}<FakeBadge />
-              </p>
-            </div>
-          </div>
-
-          {/* Trade area */}
-          <div className="bg-[#112236] rounded-xl p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">
-              Trade Area · 10-Min Drive
-            </p>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1 text-slate-500">
-                  <Users size={10} />
-                  <span className="text-xs">Population</span>
-                </div>
-                <p className="text-sm font-bold text-white">
-                  {(analysis.trade_area.population / 1000).toFixed(0)}k
-                </p>
-              </div>
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1 text-slate-500">
-                  <DollarSign size={10} />
-                  <span className="text-xs">Med. Income</span>
-                </div>
-                <p className="text-sm font-bold text-white">
-                  ${(analysis.trade_area.median_income / 1000).toFixed(0)}k
-                </p>
-              </div>
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1 text-slate-500">
-                  <Activity size={10} />
-                  <span className="text-xs">Median Age</span>
-                </div>
-                <p className="text-sm font-bold text-white">
-                  {analysis.trade_area.median_age} yrs
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Nearby EOS locations */}
-          {analysis.nearby_eos.length > 0 && (
-            <div className="bg-[#112236] rounded-xl p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">
-                Nearby EOS Locations
-              </p>
-              <div className="flex flex-col gap-2">
-                {analysis.nearby_eos.map((loc) => (
-                  <div key={loc.gym_id} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
-                      <span className="text-xs text-slate-300 leading-tight">
-                        {loc.name.replace("EOS Fitness – ", "")}
-                      </span>
-                    </div>
-                    <span className="text-xs text-slate-500 tabular-nums">
-                      {loc.distance_miles} mi
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Nearby competitors */}
-          {analysis.nearby_competitors.length > 0 && (
-            <div className="bg-[#112236] rounded-xl p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">
-                Nearby Competitors
-              </p>
-              <div className="flex flex-col gap-2">
-                {analysis.nearby_competitors.map((c, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-orange-400 shrink-0" />
-                      <div>
-                        <span className="text-xs text-slate-300 leading-tight">{c.name}</span>
-                        {c.rating && (
-                          <span className="text-xs text-slate-500 ml-1.5">★ {c.rating}</span>
-                        )}
-                      </div>
-                    </div>
-                    <span className="text-xs text-slate-500 tabular-nums">
-                      {c.distance_miles} mi
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {analysis.nearby_competitors.length === 0 && (
-            <p className="text-xs text-slate-600 text-center py-2">
-              Enable the Competitors layer to see nearby competitors
-            </p>
-          )}
-        </>
-      )}
-    </div>
-  );
-}
-
 // ── Main panel ────────────────────────────────────────────────────────────────
 
 export default function AnalysisPanel({
   isOpen,
   loading,
-  selectedGym,
-  gymAnalysis,
   scoreResult,
   onClose,
 }: Props) {
-  const title = selectedGym ? "Location Analysis" : "Site Opportunity";
-
   return (
     <div
       className={cn(
@@ -404,7 +195,7 @@ export default function AnalysisPanel({
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
         <div className="flex items-center gap-2">
           <Activity size={16} className="text-blue-400" />
-          <span className="text-white font-semibold text-sm">{title}</span>
+          <span className="text-white font-semibold text-sm">Site Opportunity</span>
         </div>
         <button onClick={onClose} className="text-slate-500 hover:text-slate-300 transition-colors">
           <X size={16} />
@@ -412,11 +203,7 @@ export default function AnalysisPanel({
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-4">
-        {selectedGym ? (
-          <LocationAnalysisView gym={selectedGym} analysis={gymAnalysis ?? null} loading={loading} />
-        ) : (
-          <SiteOpportunityView result={scoreResult ?? null} loading={loading} />
-        )}
+        <SiteOpportunityView result={scoreResult ?? null} loading={loading} />
       </div>
     </div>
   );

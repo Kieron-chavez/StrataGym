@@ -7,6 +7,7 @@ import TopBar from "@/components/TopBar";
 import AnalysisPanel, {
   AnalysisPanelToggle,
 } from "@/components/AnalysisPanel";
+import GymDrawer from "@/components/GymDrawer";
 import { fetchGyms, fetchGymAnalysis, scoreLocation } from "@/lib/api";
 import type { Gym, GymAnalysis, ScoreResult } from "@/lib/api";
 import type { Layer, LayerId } from "@/types";
@@ -69,7 +70,6 @@ export default function DashboardPage() {
     setSelectedSite(null);
     setScoreResult(null);
     setGymAnalysis(null);
-    setPanelOpen(true);
     setLoading(true);
     try {
       const analysis = await fetchGymAnalysis(gym.gym_id);
@@ -114,13 +114,18 @@ export default function DashboardPage() {
               selectedSite={selectedSite}
             />
 
-            {!panelOpen && (
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10">
-                <AnalysisPanelToggle
-                  isOpen={false}
-                  onClick={() => setPanelOpen(true)}
-                />
-              </div>
+            <AnalysisPanelToggle
+              isOpen={panelOpen}
+              onClick={() => setPanelOpen((v) => !v)}
+            />
+
+            {selectedLocation && (
+              <GymDrawer
+                gym={selectedLocation}
+                gymAnalysis={gymAnalysis}
+                loading={loading}
+                onClose={handleClearSelection}
+              />
             )}
           </div>
 
@@ -128,8 +133,6 @@ export default function DashboardPage() {
             <AnalysisPanel
               isOpen={panelOpen}
               loading={loading}
-              selectedGym={selectedLocation}
-              gymAnalysis={gymAnalysis}
               scoreResult={scoreResult}
               onClose={() => setPanelOpen(false)}
             />
