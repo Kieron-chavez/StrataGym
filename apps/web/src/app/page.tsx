@@ -50,8 +50,6 @@ export default function DashboardPage() {
 
   const handleMapClick = useCallback(async (lat: number, lng: number) => {
     setSelectedSite({ lat, lng });
-    setSelectedLocation(null);
-    setGymAnalysis(null);
     setScoreResult(null);
     setPanelOpen(true);
     setLoading(true);
@@ -67,8 +65,6 @@ export default function DashboardPage() {
 
   const handleGymClick = useCallback(async (gym: Gym) => {
     setSelectedLocation(gym);
-    setSelectedSite(null);
-    setScoreResult(null);
     setGymAnalysis(null);
     setLoading(true);
     try {
@@ -79,6 +75,17 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  const handleCloseDrawer = useCallback(() => {
+    setSelectedLocation(null);
+    setGymAnalysis(null);
+  }, []);
+
+  const handleClosePanel = useCallback(() => {
+    setSelectedSite(null);
+    setScoreResult(null);
+    setPanelOpen(false);
   }, []);
 
   const handleClearSelection = useCallback(() => {
@@ -124,7 +131,7 @@ export default function DashboardPage() {
                 gym={selectedLocation}
                 gymAnalysis={gymAnalysis}
                 loading={loading}
-                onClose={handleClearSelection}
+                onClose={handleCloseDrawer}
               />
             )}
           </div>
@@ -134,7 +141,7 @@ export default function DashboardPage() {
               isOpen={panelOpen}
               loading={loading}
               scoreResult={scoreResult}
-              onClose={() => setPanelOpen(false)}
+              onClose={handleClosePanel}
             />
           )}
         </div>
