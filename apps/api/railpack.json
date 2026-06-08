@@ -1,0 +1,5 @@
+{
+  "build": {
+    "cmd": "echo 'no build step'"
+  }
+}
