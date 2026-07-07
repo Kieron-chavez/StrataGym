@@ -1,0 +1,155 @@
+# =============================================================================
+# ml/config.yaml — single source of truth for the StrataGym ML pipeline.
+# Every script in ml/src/ reads constants from here. Nothing is hardcoded.
+# =============================================================================
+
+paths:
+  # All paths relative to the ml/ directory
+  raw_dir:            data/raw
+  processed_dir:      data/processed
+  grid_dir:           data/grid
+  models_dir:         models
+  outputs_dir:        outputs
+  eos_locations:      data/raw/eos_locations.csv
+  census_tracts:      data/raw/census_tracts_combined.csv
+  tract_centroids:    data/raw/tract_centroids_az.csv
+  competitors:        data/raw/competitors_metro.csv
+  features:           data/processed/features.csv
+  training_data:      data/processed/training_data.csv
+  grid_features:      data/grid/candidate_grid_features.csv
+  model:              models/model.json
+  metrics:            models/metrics.json
+  grid_scores:        outputs/grid_scores.json
+  location_scores:    outputs/location_scores.json
+
+# Feature columns — the exact list every script uses, in training order.
+feature_columns:
+  - total_population
+  - population_density
+  - median_hh_income
+  - median_age
+  - pct_age_20_45
+  - pct_bachelors_plus
+  - reachable_pop_10min
+  - reachable_pop_15min
+  - reachable_pop_25min
+  - competitor_count_3mi
+  - nearest_competitor_dist_mi
+  - eos_count_5mi
+  - nearest_eos_dist_mi
+  - years_open
+
+# Trade area definition
+trade_area:
+  radius_mi: 5.5              # demographic aggregation radius (~15-min drive proxy)
+  # Straight-line radii used to approximate drive-time isochrone populations.
+  # Calibrated for Phoenix's arterial grid (~0.7 crow-fly factor on 25-35 mph
+  # effective speeds). Replace with real isochrones via ingest/drive_time.py.
+  drive_time_radii_mi:
+    "10": 3.5
+    "15": 5.5
+    "25": 10.5
+
+competition:
+  competitor_radius_mi: 3.0   # radius for competitor_count_3mi
+  eos_radius_mi: 5.0          # radius for eos_count_5mi (cannibalization signal)
+
+# Synthetic target generation (synthesize.py) — grounded in fitness industry
+# relationships; swap for real EOS performance data later.
+synthesis:
+  penetration_rate: 0.09          # share of 15-min reachable pop as base membership pool
+  avg_monthly_visits: 10          # visits per active member per month
+  noise_std: 0.12                 # multiplicative gaussian noise std
+  competition_penalty: 0.15       # competition_factor = 1/(1 + coef * competitor_count_3mi)
+  cannibal_penalty: 0.30          # cannibal_factor = 1/(1 + coef * eos_count_5mi)
+  default_years_open: 3.0         # used when open date unavailable
+  maturity_years_to_full: 2.0     # maturity_ramp = min(1, years_open / this)
+  prime_age_baseline: 0.35        # age_multiplier = pct_age_20_45 / this
+  random_seed: 42
+  # Income sweet spot for value gym brands like EOS: $55k–$90k
+  income_multipliers:             # applied to median_hh_income (upper bound, multiplier)
+    - [40000,  0.75]              # < 40k
+    - [55000,  0.90]              # 40k–55k
+    - [90000,  1.10]              # 55k–90k  ← sweet spot
+    - [120000, 0.95]              # 90k–120k
+    - [.inf,   0.80]              # > 120k
+  tier_quantiles: [0.3333, 0.6667]   # bottom third "under", top third "top"
+
+model:
+  xgboost:
+    max_depth: 3
+    n_estimators: 150
+    learning_rate: 0.05
+    subsample: 0.9
+    colsample_bytree: 0.9
+    random_state: 42
+    verbosity: 0
+  loo_warn_pct: 40                # warn if LOO prediction off by more than this %
+
+explain:
+  top_n_drivers: 4
+  points_scale: 30                # SHAP contributions scaled to -30..+30 pts
+  labels:
+    competitor_count_3mi:        "Competitor density"
+    median_hh_income:            "Trade area income"
+    eos_count_5mi:               "Cannibalization risk"
+    reachable_pop_15min:         "Reachable population"
+    pct_age_20_45:               "Prime-age demographic"
+    population_density:          "Population density"
+    nearest_competitor_dist_mi:  "Distance to competition"
+    total_population:            "Trade area population"
+    median_age:                  "Median age"
+    pct_bachelors_plus:          "College-educated share"
+    reachable_pop_10min:         "10-min reachable population"
+    reachable_pop_25min:         "25-min reachable population"
+    nearest_eos_dist_mi:         "Distance to nearest EOS"
+    years_open:                  "Location maturity"
+
+scoring:
+  # Cannibalization: overlap_pct = max(0, 1 - dist_mi/radius) * max_overlap per EOS location
+  cannibalization_radius_mi: 5.0
+  cannibalization_max_overlap: 0.35
+  score_labels:                   # opportunity_score lower bound → label
+    - [75, "Strong site"]
+    - [60, "Promising site"]
+    - [40, "Average site"]
+    - [0,  "Weak site"]
+  cannibalization_labels:         # cannibalization_pct upper bound → label
+    - [12,  "Low"]
+    - [30,  "Moderate"]
+    - [100, "High"]
+
+grid:
+  # Phoenix metro bounding box for the candidate grid
+  bbox:
+    lat_min: 33.15
+    lat_max: 33.75
+    lng_min: -112.45
+    lng_max: -111.60
+  spacing_deg: 0.015              # ~1 mile
+  # Cells whose 15-min reachable population falls below this are desert fringe —
+  # scored but flagged in the sanity summary.
+  min_reachable_pop_15min: 25000
+  heatmap_thresholds:
+    hot: 70
+    warm: 50
+
+ingest:
+  # Metro-wide competitor sweep (Google Places text search)
+  competitor_sweep_spacing_deg: 0.09    # ~6 mi between search centers
+  competitor_search_radius_m: 8047      # 5 mi per search center
+  boutique_keywords:                    # excluded from big-box competitor counts
+    - yoga
+    - pilates
+    - barre
+    - spin studio
+    - cycling studio
+    - dance
+    - ballet
+    - martial arts
+    - karate
+    - jiu jitsu
+    - boxing
+    - kickboxing
+    - zumba
+    - crossfit

@@ -1,4 +1,5 @@
 from __future__ import annotations
+import json
 import math
 import hashlib
 import cache
@@ -10,6 +11,22 @@ from store import GYMS
 router = APIRouter()
 
 TRADE_AREA_MILES = 5.0  # ~10-min drive proxy
+
+LOCATION_SCORES_PATH = REPO_ROOT / "ml" / "outputs" / "location_scores.json"
+_loc_scores_cache: dict = {"mtime": None, "data": {}}
+
+
+def _location_scores() -> dict[str, dict]:
+    """gym_id → {score, tier, predicted_checkins, score_drivers} from the ML
+    pipeline (ml/src/score_grid.py). Empty dict if not computed yet."""
+    if not LOCATION_SCORES_PATH.exists():
+        return {}
+    mtime = LOCATION_SCORES_PATH.stat().st_mtime
+    if _loc_scores_cache["mtime"] != mtime:
+        with open(LOCATION_SCORES_PATH) as f:
+            _loc_scores_cache["data"] = {d["gym_id"]: d for d in json.load(f)}
+        _loc_scores_cache["mtime"] = mtime
+    return _loc_scores_cache["data"]
 
 
 def _haversine_miles(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
@@ -57,7 +74,17 @@ def _get_census_tracts() -> list[dict]:
 
 @router.get("/api/gyms")
 def get_gyms():
-    return {"gyms": GYMS}
+    scores = _location_scores()
+    gyms = []
+    for g in GYMS:
+        s = scores.get(g["gym_id"])
+        gyms.append({
+            **g,
+            "tier": s["tier"] if s else None,
+            "opportunity_score": s["score"] if s else None,
+            "predicted_checkins": s["predicted_checkins"] if s else None,
+        })
+    return {"gyms": gyms}
 
 
 @router.get("/api/gyms/{gym_id}/analysis")
@@ -66,11 +93,18 @@ def get_gym_analysis(gym_id: str):
     if not gym:
         raise HTTPException(status_code=404, detail="Gym not found")
 
-    # Performance tier — actual rank within the network by monthly check-ins
-    rank_pct = round(
-        sum(1 for g in GYMS if g["monthly_checkins"] <= gym["monthly_checkins"]) / len(GYMS) * 100
-    )
-    tier = "Top Performer" if rank_pct >= 67 else "Average" if rank_pct >= 34 else "Underperforming"
+    # Performance tier — model-predicted rank from ml/outputs/location_scores.json
+    # (falls back to check-in rank if the ML pipeline hasn't been run)
+    score_entry = _location_scores().get(gym_id)
+    if score_entry:
+        rank_pct = round(score_entry["score"])
+        tier = {"top": "Top Performer", "average": "Average",
+                "under": "Underperforming"}[score_entry["tier"]]
+    else:
+        rank_pct = round(
+            sum(1 for g in GYMS if g["monthly_checkins"] <= gym["monthly_checkins"]) / len(GYMS) * 100
+        )
+        tier = "Top Performer" if rank_pct >= 67 else "Average" if rank_pct >= 34 else "Underperforming"
 
     # Open date — deterministic pseudo data seeded by gym_id
     h = int(hashlib.md5(gym_id.encode()).hexdigest()[:8], 16)

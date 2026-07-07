@@ -1,8 +1,15 @@
-xgboost>=1.7
-lightgbm>=3.3
-scikit-learn>=1.2
-pandas>=1.5
-numpy>=1.23
+# StrataGym ML pipeline (ml/src/) — Python 3.10+
+xgboost>=3.0
+shap>=0.46
+scikit-learn>=1.4
+pandas>=2.2
+numpy>=1.26
+scipy>=1.11
+pyyaml>=6.0
+requests>=2.31
+python-dotenv>=1.0
+
+# Legacy scripts in ml/scripts/ additionally use:
 matplotlib>=3.6
+lightgbm>=3.3
 plotly>=5.10
-scipy>=1.9

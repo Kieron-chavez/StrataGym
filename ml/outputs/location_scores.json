@@ -1,0 +1,1366 @@
+[
+  {
+    "gym_id": "eos-az-001",
+    "name": "EOS Fitness \u2013 Avondale",
+    "lat": 33.4801112,
+    "lng": -112.3390477,
+    "predicted_checkins": 82296,
+    "score": 36.4,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": -26,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -19,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -18,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-002",
+    "name": "EOS Fitness \u2013 Casa Grande",
+    "lat": 32.8805542,
+    "lng": -111.7341884,
+    "predicted_checkins": 48164,
+    "score": 9.1,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -10,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": 7,
+        "direction": "positive"
+      },
+      {
+        "label": "Population density",
+        "points": -6,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-003",
+    "name": "EOS Fitness \u2013 Chandler #1",
+    "lat": 33.3182429,
+    "lng": -111.9272518,
+    "predicted_checkins": 92307,
+    "score": 47.7,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "College-educated share",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": -22,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": -15,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -13,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-004",
+    "name": "EOS Fitness \u2013 Chandler #2",
+    "lat": 33.322377,
+    "lng": -111.8079515,
+    "predicted_checkins": 165981,
+    "score": 81.8,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": 19,
+        "direction": "positive"
+      },
+      {
+        "label": "College-educated share",
+        "points": -10,
+        "direction": "negative"
+      },
+      {
+        "label": "Reachable population",
+        "points": 6,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-005",
+    "name": "EOS Fitness \u2013 Chandler #3",
+    "lat": 33.2455602,
+    "lng": -111.7880343,
+    "predicted_checkins": 54538,
+    "score": 11.4,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -29,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -17,
+        "direction": "negative"
+      },
+      {
+        "label": "Population density",
+        "points": -15,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-006",
+    "name": "EOS Fitness \u2013 Gilbert #1",
+    "lat": 33.2970291,
+    "lng": -111.7533518,
+    "predicted_checkins": 47911,
+    "score": 6.8,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "College-educated share",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": -26,
+        "direction": "negative"
+      },
+      {
+        "label": "Cannibalization risk",
+        "points": -22,
+        "direction": "negative"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": -21,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-007",
+    "name": "EOS Fitness \u2013 Gilbert #2",
+    "lat": 33.2909459,
+    "lng": -111.7228989,
+    "predicted_checkins": 71548,
+    "score": 22.7,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "College-educated share",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": -26,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -17,
+        "direction": "negative"
+      },
+      {
+        "label": "Population density",
+        "points": -9,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-008",
+    "name": "EOS Fitness \u2013 Gilbert #3",
+    "lat": 33.2795753,
+    "lng": -111.6876983,
+    "predicted_checkins": 83217,
+    "score": 38.6,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -28,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": 25,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": -19,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-009",
+    "name": "EOS Fitness \u2013 Glendale #1",
+    "lat": 33.5686552,
+    "lng": -112.1678406,
+    "predicted_checkins": 151580,
+    "score": 68.2,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Competitor density",
+        "points": -24,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": 14,
+        "direction": "positive"
+      },
+      {
+        "label": "Population density",
+        "points": 13,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-010",
+    "name": "EOS Fitness \u2013 Glendale #2",
+    "lat": 33.5373189,
+    "lng": -112.1532319,
+    "predicted_checkins": 339792,
+    "score": 93.2,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "College-educated share",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": 11,
+        "direction": "positive"
+      },
+      {
+        "label": "Competitor density",
+        "points": 6,
+        "direction": "positive"
+      },
+      {
+        "label": "Median age",
+        "points": 4,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-011",
+    "name": "EOS Fitness \u2013 Glendale #3",
+    "lat": 33.6127316,
+    "lng": -112.1842852,
+    "predicted_checkins": 90708,
+    "score": 43.2,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "Competitor density",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": 20,
+        "direction": "positive"
+      },
+      {
+        "label": "Cannibalization risk",
+        "points": -15,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": 9,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-012",
+    "name": "EOS Fitness \u2013 Glendale #4",
+    "lat": 33.510074,
+    "lng": -112.2380086,
+    "predicted_checkins": 369275,
+    "score": 97.7,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "College-educated share",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": 11,
+        "direction": "positive"
+      },
+      {
+        "label": "Competitor density",
+        "points": 7,
+        "direction": "positive"
+      },
+      {
+        "label": "Median age",
+        "points": 6,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-013",
+    "name": "EOS Fitness \u2013 Glendale #5",
+    "lat": 33.6700763,
+    "lng": -112.1845646,
+    "predicted_checkins": 84821,
+    "score": 40.9,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -26,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -24,
+        "direction": "negative"
+      },
+      {
+        "label": "Population density",
+        "points": -21,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-014",
+    "name": "EOS Fitness \u2013 Goodyear",
+    "lat": 33.4625049,
+    "lng": -112.3875162,
+    "predicted_checkins": 80847,
+    "score": 31.8,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -21,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -16,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": -12,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-015",
+    "name": "EOS Fitness \u2013 Laveen Village",
+    "lat": 33.3790385,
+    "lng": -112.1880319,
+    "predicted_checkins": 126818,
+    "score": 59.1,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "Median age",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": -21,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": 20,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": -16,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-016",
+    "name": "EOS Fitness \u2013 Mesa #1",
+    "lat": 33.4241068,
+    "lng": -111.7719929,
+    "predicted_checkins": 100736,
+    "score": 52.3,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -23,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": -17,
+        "direction": "negative"
+      },
+      {
+        "label": "Median age",
+        "points": -12,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-017",
+    "name": "EOS Fitness \u2013 Mesa #2",
+    "lat": 33.3845959,
+    "lng": -111.8557407,
+    "predicted_checkins": 175323,
+    "score": 84.1,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": 13,
+        "direction": "positive"
+      },
+      {
+        "label": "Population density",
+        "points": 13,
+        "direction": "positive"
+      },
+      {
+        "label": "Cannibalization risk",
+        "points": -10,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-018",
+    "name": "EOS Fitness \u2013 Mesa #3",
+    "lat": 33.3770094,
+    "lng": -111.6380319,
+    "predicted_checkins": 91444,
+    "score": 45.5,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -25,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -17,
+        "direction": "negative"
+      },
+      {
+        "label": "Cannibalization risk",
+        "points": 15,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-019",
+    "name": "EOS Fitness \u2013 Mesa #4",
+    "lat": 33.388061,
+    "lng": -111.5996167,
+    "predicted_checkins": 103141,
+    "score": 54.5,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": 23,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": -18,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -12,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-020",
+    "name": "EOS Fitness \u2013 Mesa #5",
+    "lat": 33.38039790000001,
+    "lng": -111.7855938,
+    "predicted_checkins": 150656,
+    "score": 65.9,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Cannibalization risk",
+        "points": -22,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": 22,
+        "direction": "positive"
+      },
+      {
+        "label": "College-educated share",
+        "points": -11,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-021",
+    "name": "EOS Fitness \u2013 Mesa #6",
+    "lat": 33.3852159,
+    "lng": -111.7424476,
+    "predicted_checkins": 155724,
+    "score": 72.7,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "Trade area population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Competitor density",
+        "points": 24,
+        "direction": "positive"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": -15,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -9,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-022",
+    "name": "EOS Fitness \u2013 Mesa #7",
+    "lat": 33.4532154,
+    "lng": -111.7887612,
+    "predicted_checkins": 145501,
+    "score": 63.6,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "Competitor density",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Population density",
+        "points": 23,
+        "direction": "positive"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": -20,
+        "direction": "negative"
+      },
+      {
+        "label": "Cannibalization risk",
+        "points": 15,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-023",
+    "name": "EOS Fitness \u2013 Peoria #1",
+    "lat": 33.61150920000001,
+    "lng": -112.2407923,
+    "predicted_checkins": 234995,
+    "score": 90.9,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Competitor density",
+        "points": 17,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": 11,
+        "direction": "positive"
+      },
+      {
+        "label": "Cannibalization risk",
+        "points": 8,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-024",
+    "name": "EOS Fitness \u2013 Peoria #2",
+    "lat": 33.6787307,
+    "lng": -112.2754085,
+    "predicted_checkins": 82294,
+    "score": 34.1,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -24,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -18,
+        "direction": "negative"
+      },
+      {
+        "label": "Cannibalization risk",
+        "points": 14,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-025",
+    "name": "EOS Fitness \u2013 Phoenix #1",
+    "lat": 33.5228048,
+    "lng": -112.0488195,
+    "predicted_checkins": 164087,
+    "score": 79.5,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Competitor density",
+        "points": -20,
+        "direction": "negative"
+      },
+      {
+        "label": "Population density",
+        "points": 14,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": 12,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-026",
+    "name": "EOS Fitness \u2013 Phoenix #2",
+    "lat": 33.6415647,
+    "lng": -112.1195696,
+    "predicted_checkins": 152500,
+    "score": 70.5,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": 19,
+        "direction": "positive"
+      },
+      {
+        "label": "College-educated share",
+        "points": -11,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": -10,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-027",
+    "name": "EOS Fitness \u2013 Phoenix #3",
+    "lat": 33.5978816,
+    "lng": -112.0354343,
+    "predicted_checkins": 215035,
+    "score": 86.4,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Population density",
+        "points": 11,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": 10,
+        "direction": "positive"
+      },
+      {
+        "label": "Cannibalization risk",
+        "points": 8,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-028",
+    "name": "EOS Fitness \u2013 Phoenix #4",
+    "lat": 33.4839703,
+    "lng": -112.0749532,
+    "predicted_checkins": 135933,
+    "score": 61.4,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "Competitor density",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": 22,
+        "direction": "positive"
+      },
+      {
+        "label": "Population density",
+        "points": 12,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": 9,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-029",
+    "name": "EOS Fitness \u2013 Phoenix #5",
+    "lat": 33.6039244,
+    "lng": -111.9766553,
+    "predicted_checkins": 74756,
+    "score": 29.5,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "College-educated share",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": -20,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -18,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": -8,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-030",
+    "name": "EOS Fitness \u2013 Phoenix #6",
+    "lat": 33.4738021,
+    "lng": -112.2183848,
+    "predicted_checkins": 358228,
+    "score": 95.5,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "College-educated share",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": 11,
+        "direction": "positive"
+      },
+      {
+        "label": "Competitor density",
+        "points": 7,
+        "direction": "positive"
+      },
+      {
+        "label": "Median age",
+        "points": 5,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-031",
+    "name": "EOS Fitness \u2013 Phoenix #7",
+    "lat": 33.6577084,
+    "lng": -111.9300138,
+    "predicted_checkins": 74521,
+    "score": 27.3,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -26,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -17,
+        "direction": "negative"
+      },
+      {
+        "label": "Population density",
+        "points": -9,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-032",
+    "name": "EOS Fitness \u2013 Phoenix #8",
+    "lat": 33.4479619,
+    "lng": -112.0733931,
+    "predicted_checkins": 159487,
+    "score": 77.3,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Competitor density",
+        "points": -20,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": 12,
+        "direction": "positive"
+      },
+      {
+        "label": "Median age",
+        "points": 12,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-033",
+    "name": "EOS Fitness \u2013 Phoenix #9",
+    "lat": 33.3791102,
+    "lng": -112.0979771,
+    "predicted_checkins": 125887,
+    "score": 56.8,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": 29,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": -20,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -14,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-034",
+    "name": "EOS Fitness \u2013 Queen Creek #1",
+    "lat": 33.2610734,
+    "lng": -111.601701,
+    "predicted_checkins": 54781,
+    "score": 13.6,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -11,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -10,
+        "direction": "negative"
+      },
+      {
+        "label": "Population density",
+        "points": -7,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-035",
+    "name": "EOS Fitness \u2013 Queen Creek #2",
+    "lat": 33.2213251,
+    "lng": -111.6359673,
+    "predicted_checkins": 65517,
+    "score": 20.5,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -10,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": 8,
+        "direction": "positive"
+      },
+      {
+        "label": "Population density",
+        "points": -6,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-036",
+    "name": "EOS Fitness \u2013 Scottsdale #1",
+    "lat": 33.5866826,
+    "lng": -111.8375752,
+    "predicted_checkins": 42135,
+    "score": 0.0,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -11,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -9,
+        "direction": "negative"
+      },
+      {
+        "label": "Population density",
+        "points": -6,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-037",
+    "name": "EOS Fitness \u2013 Scottsdale #2",
+    "lat": 33.6201988,
+    "lng": -111.8961702,
+    "predicted_checkins": 47103,
+    "score": 4.5,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -13,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -8,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": 7,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-038",
+    "name": "EOS Fitness \u2013 Surprise #1",
+    "lat": 33.5933971,
+    "lng": -112.4132285,
+    "predicted_checkins": 64235,
+    "score": 18.2,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -10,
+        "direction": "negative"
+      },
+      {
+        "label": "Competitor density",
+        "points": 9,
+        "direction": "positive"
+      },
+      {
+        "label": "College-educated share",
+        "points": -7,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-039",
+    "name": "EOS Fitness \u2013 Surprise #2",
+    "lat": 33.6079004,
+    "lng": -112.360248,
+    "predicted_checkins": 74124,
+    "score": 25.0,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -18,
+        "direction": "negative"
+      },
+      {
+        "label": "Population density",
+        "points": -16,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -14,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-040",
+    "name": "EOS Fitness \u2013 Surprise #3",
+    "lat": 33.6402303,
+    "lng": -112.4197,
+    "predicted_checkins": 46247,
+    "score": 2.3,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -9,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -8,
+        "direction": "negative"
+      },
+      {
+        "label": "Population density",
+        "points": -7,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-041",
+    "name": "EOS Fitness \u2013 Tempe #1",
+    "lat": 33.4061499,
+    "lng": -111.9252213,
+    "predicted_checkins": 216832,
+    "score": 88.6,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Median age",
+        "points": 13,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": 11,
+        "direction": "positive"
+      },
+      {
+        "label": "Population density",
+        "points": 10,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-042",
+    "name": "EOS Fitness \u2013 Tempe #2",
+    "lat": 33.3650342,
+    "lng": -111.9300785,
+    "predicted_checkins": 155893,
+    "score": 75.0,
+    "tier": "top",
+    "score_drivers": [
+      {
+        "label": "25-min reachable population",
+        "points": 30,
+        "direction": "positive"
+      },
+      {
+        "label": "Population density",
+        "points": 22,
+        "direction": "positive"
+      },
+      {
+        "label": "Trade area population",
+        "points": 21,
+        "direction": "positive"
+      },
+      {
+        "label": "Cannibalization risk",
+        "points": -19,
+        "direction": "negative"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-043",
+    "name": "EOS Fitness \u2013 Tempe #3",
+    "lat": 33.3356239,
+    "lng": -111.9095203,
+    "predicted_checkins": 98846,
+    "score": 50.0,
+    "tier": "average",
+    "score_drivers": [
+      {
+        "label": "Cannibalization risk",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -27,
+        "direction": "negative"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": -25,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": 22,
+        "direction": "positive"
+      }
+    ]
+  },
+  {
+    "gym_id": "eos-az-044",
+    "name": "EOS Fitness \u2013 Tempe #4",
+    "lat": 33.3325137,
+    "lng": -111.9687798,
+    "predicted_checkins": 62713,
+    "score": 15.9,
+    "tier": "under",
+    "score_drivers": [
+      {
+        "label": "Competitor density",
+        "points": -30,
+        "direction": "negative"
+      },
+      {
+        "label": "College-educated share",
+        "points": -29,
+        "direction": "negative"
+      },
+      {
+        "label": "25-min reachable population",
+        "points": -24,
+        "direction": "negative"
+      },
+      {
+        "label": "Trade area population",
+        "points": -14,
+        "direction": "negative"
+      }
+    ]
+  }
+]

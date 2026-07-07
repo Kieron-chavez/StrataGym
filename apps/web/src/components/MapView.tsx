@@ -3,8 +3,16 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import type { Gym, CensusTract, Competitor } from "@/lib/api";
+import type { Gym, CensusTract, Competitor, GridCell } from "@/lib/api";
 import type { Layer } from "@/types";
+
+// Pin colors by ML performance tier (ml/outputs/location_scores.json via /api/gyms)
+const TIER_COLORS: Record<string, { fill: string; glow: string }> = {
+  top:     { fill: "#2563EB", glow: "rgba(37,99,235,0.5)" },   // solid blue
+  average: { fill: "#60A5FA", glow: "rgba(96,165,250,0.4)" },  // medium blue
+  under:   { fill: "#94A3B8", glow: "rgba(148,163,184,0.35)" } // light blue/gray
+};
+const DEFAULT_PIN = { fill: "#3B82F6", glow: "rgba(59,130,246,0.4)" };
 
 interface Props {
   gyms: Gym[];
@@ -52,6 +60,7 @@ export default function MapView({
   const driveTime25GeojsonRef  = useRef<object | null>(null);
   const censusTractsRef     = useRef<CensusTract[] | null>(null);
   const competitorDataRef   = useRef<Competitor[] | null>(null);
+  const gridScoresRef       = useRef<GridCell[] | null>(null);
 
   // ── Eager pre-fetch census + competitor data once map is ready ──────────────
   useEffect(() => {
@@ -133,14 +142,15 @@ export default function MapView({
     const add = () => {
       gyms.forEach((gym) => {
         const isSelected = selectedLocation?.gym_id === gym.gym_id;
+        const tier = gym.tier ? TIER_COLORS[gym.tier] ?? DEFAULT_PIN : DEFAULT_PIN;
         const el = document.createElement("div");
         el.style.cssText = isSelected
-          ? `width:22px;height:22px;border-radius:50%;background:#60a5fa;
+          ? `width:22px;height:22px;border-radius:50%;background:${tier.fill};
              border:3px solid #fff;cursor:pointer;
-             box-shadow:0 0 0 5px rgba(96,165,250,0.5),0 0 20px rgba(96,165,250,0.4);`
-          : `width:18px;height:18px;border-radius:50%;background:#3B82F6;
+             box-shadow:0 0 0 5px ${tier.glow},0 0 20px ${tier.glow};`
+          : `width:18px;height:18px;border-radius:50%;background:${tier.fill};
              border:2.5px solid #fff;cursor:pointer;
-             box-shadow:0 0 0 3px rgba(59,130,246,0.4);`;
+             box-shadow:0 0 0 3px ${tier.glow};`;
 
         const popup = new mapboxgl.Popup({ offset: 12, closeButton: false }).setHTML(`
           <div style="background:#112236;color:#e2e8f0;padding:10px 12px;border-radius:8px;
@@ -389,6 +399,63 @@ export default function MapView({
     }
 
     return () => { competitorMarkersRef.current.forEach((m) => m.remove()); competitorMarkersRef.current = []; };
+  }, [layers]);
+
+  // ── Opportunity heatmap (precomputed ML grid scores) ────────────────────────
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    let cancelled = false;
+
+    const active   = layers.find((l) => l.id === "opportunity-heatmap")?.active;
+    const SRC      = "sg-opportunity"; const LAYER = "sg-opp-heat";
+    const clean    = () => removeLayers(map, [LAYER], SRC);
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
+    const apply = (cells: GridCell[]) => {
+      clean();
+      const geojson = {
+        type: "FeatureCollection" as const,
+        features: cells.map((c) => ({
+          type: "Feature" as const,
+          geometry: { type: "Point" as const, coordinates: [c.lng, c.lat] },
+          properties: { score: c.score },
+        })),
+      };
+      const before = beforeSymbol(map);
+      try {
+        map.addSource(SRC, { type: "geojson", data: geojson });
+        map.addLayer({
+          id: LAYER, type: "heatmap", source: SRC,
+          paint: {
+            "heatmap-weight": ["interpolate", ["linear"], ["get", "score"], 0, 0, 100, 1],
+            "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 8, 0.7, 12, 1.6],
+            "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 8, 12, 11, 26, 13, 48],
+            "heatmap-color": ["interpolate", ["linear"], ["heatmap-density"],
+              0,    "rgba(15,41,66,0)",
+              0.25, "#1d4ed8",
+              0.5,  "#06b6d4",
+              0.75, "#f59e0b",
+              1,    "#ef4444",
+            ],
+            "heatmap-opacity": 0.55,
+          },
+        }, before);
+      } catch { /* concurrent run beat us here */ }
+    };
+
+    const run = async () => {
+      if (!active) { clean(); return; }
+      if (gridScoresRef.current) { apply(gridScoresRef.current); return; }
+      const data = await fetch(`${API_BASE}/api/grid-scores`)
+        .then((r) => (r.ok ? r.json() : null)).catch(() => null);
+      if (cancelled || !data?.cells || !map.isStyleLoaded()) return;
+      gridScoresRef.current = data.cells as GridCell[];
+      apply(gridScoresRef.current);
+    };
+
+    map.isStyleLoaded() ? run() : map.once("load", run);
+    return () => { cancelled = true; clean(); };
   }, [layers]);
 
   // ── Population / member-density layer ──────────────────────────────────────
