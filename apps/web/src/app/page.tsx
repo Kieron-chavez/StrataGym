@@ -20,6 +20,7 @@ const INITIAL_LAYERS: Layer[] = [
   { id: "drive-time", label: "Drive Time · 10 min", active: false },
   { id: "drive-time-25", label: "Drive Time · 25 min", active: false },
   { id: "competitors", label: "Competitors", active: false },
+  { id: "opportunity-heatmap", label: "Opportunity Heatmap", active: false },
 ];
 
 export default function DashboardPage() {

@@ -1,5 +1,7 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
+export type GymTier = "top" | "average" | "under";
+
 export interface Gym {
   gym_id: string;
   name: string;
@@ -11,6 +13,10 @@ export interface Gym {
   monthly_checkins: number;
   rating?: number;
   review_count?: number;
+  // From the ML pipeline (ml/outputs/location_scores.json); null until it runs
+  tier?: GymTier | null;
+  opportunity_score?: number | null;
+  predicted_checkins?: number | null;
 }
 
 export interface NearbyGym {
@@ -21,14 +27,37 @@ export interface NearbyGym {
   distance_miles: number;
 }
 
+export interface ScoreDriver {
+  label: string;
+  points: number;
+  direction: "positive" | "negative";
+}
+
+export interface NearbyEosImpact {
+  name: string;
+  distance_mi: number;
+  cannibalization_pct: number;
+  impact: number;
+}
+
 export interface ScoreResult {
   lat: number;
   lng: number;
   opportunity_score: number;
+  score_label: string;
+  score_percentile_label: string;
   projected_checkins: number;
-  cannibalization_risk: number;
+  cannibalization_pct: number;
+  cannibalization_label: string;
   net_network_impact: number;
-  nearby_gyms: NearbyGym[];
+  score_drivers: ScoreDriver[];
+  nearby_eos_locations: NearbyEosImpact[];
+}
+
+export interface GridCell {
+  lat: number;
+  lng: number;
+  score: number;
 }
 
 export interface Competitor {
@@ -98,6 +127,13 @@ export async function fetchCompetitors(lat: number, lng: number, radiusMiles = 1
   if (!res.ok) throw new Error("Failed to fetch competitors");
   const data = await res.json();
   return data.competitors as Competitor[];
+}
+
+export async function fetchGridScores(): Promise<GridCell[]> {
+  const res = await fetch(`${API_BASE}/api/grid-scores`);
+  if (!res.ok) throw new Error("Grid scores not available");
+  const data = await res.json();
+  return data.cells as GridCell[];
 }
 
 export async function fetchCensusDensity(): Promise<CensusTract[]> {
